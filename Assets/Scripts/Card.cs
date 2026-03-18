@@ -1,7 +1,7 @@
 using UnityEngine;
 
-// Defines the suit and rank enums, and the Card class
-// it does not have to be a MonoBehaviour,
+// handle the data aspect of a card.
+
 public enum Suit
 {
     Hearts,
@@ -12,7 +12,7 @@ public enum Suit
 
 public enum Rank
 {
-    Ace = 1, // value of Ace is set to 1 here, the GameManager or a Hand script will handle the dual value of Ace (1 or 11) during gameplay.
+    Ace = 1,
     Two = 2,
     Three = 3,
     Four = 4,
@@ -28,8 +28,8 @@ public enum Rank
 }
 public class Card
 {
-    public Suit Suit;
-    public Rank Rank;
+    public Suit Suit { get; private set; }
+    public Rank Rank { get; private set; }
 
     public Card(Suit suit, Rank rank)
     {
@@ -45,7 +45,7 @@ public class Card
     {
         if (Rank == Rank.Ace)
         {
-            return 11;
+            return 11; // value of Ace is set to 11 here, the GameManager or a HandScript will handle the dual value of Ace (1 or 11) during gameplay.
         }
         if ((int)Rank >= 10)
         {

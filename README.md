@@ -15,19 +15,22 @@
 ```
 Assets/
     Scripts/
-            GameManager
-            UIManager:
-            CardVisual: ## Yet to be created
-            FaceChanger.cs
+            GameManager: Yet to be created
+            UIManager: Yet to be created
+            CardVisual
+            FaceChanger.cs ***Deprecated***
             Hand  ## Yet to be created
             Deck  ## Yet to be created
-            ARService
+            ARService ## Yet to be created
 
 ```
 
-## 1. FaceChanger.cs
+## 1. FaceChanger.cs **_Deprecated_**
 
-The script is attached to a Card prefab, it finds the `Face` as a ` MeshRenderer` object among the card's children and replaces its `mainTexture` at runtime with the approprate card from the resources.
+The script is attached to a Card prefab, it finds the `Face` as a `MeshRenderer` object among the card's children and replaces its `mainTexture` at runtime with the approprate card from the resources.
+
+> Important note: This script has a flaw; whenever `faceRenderer.material.mainTexture` is accessed, unity creates a new copy of the material.
+> That's why this functionality is re-implemented in a different way in the `CardVisual.cs` script.
 
 ```c#
 public class FaceChanger : MonoBehaviour
@@ -53,3 +56,14 @@ public class FaceChanger : MonoBehaviour
 ```
 
 ---
+
+## 2. CardVisual.cs
+
+Lives on every instanctiated Card `prefab`.
+
+### Responsibilities:
+
+- This script replaces the texture mapping functionality found in `FaceChanger.cs`.
+- Load the correct face texture from the `Resources` at runtime.
+- Expose a `Flip()` method that animates a Y-axis rotation to flip the card up and down
+- other stuff...
