@@ -48,7 +48,7 @@ public class CardVisual : MonoBehaviour
             Debug.LogError($"CardVisual: Could not load texture at path '{path}' for card '{_card}'.");
             return;
         }
-        var block = new MaterialPropertyBlock();
+        MaterialPropertyBlock block = new();
         _faceRenderer.GetPropertyBlock(block);
         block.SetTexture("_BaseMap", texture);
         block.SetTexture("_MainTex", texture); // fallback for stadard shader
