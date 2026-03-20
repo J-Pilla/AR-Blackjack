@@ -1,8 +1,6 @@
 using UnityEngine;
 
-/// <summary>
-/// FaceChange is deprecated, use CardVisual instead.
-/// </summary>
+[System.Obsolete("FaceChange is deprecated, use CardVisual instead.")]
 public class FaceChanger : MonoBehaviour
 {
     private MeshRenderer faceRenderer;
@@ -34,11 +32,5 @@ public class FaceChanger : MonoBehaviour
          * </script>
         */
         faceRenderer.material.mainTexture = Resources.Load(file, typeof(Texture)) as Texture;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 }

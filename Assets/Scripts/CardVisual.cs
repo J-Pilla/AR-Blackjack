@@ -56,7 +56,7 @@ public class CardVisual : MonoBehaviour
     /// </summary>
     private void LoadFaceTexture()
     {
-        string path = card.ResourcePath();
+        string path = card.ResourcePath;
         Texture texture = Resources.Load<Texture>(path);
 
         //Debug.Log($"CardVisual: Loading texture for card '{Card}' from path '{path}'. Texture found: {texture != null}");
