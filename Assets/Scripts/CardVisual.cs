@@ -14,23 +14,8 @@ public class CardVisual : MonoBehaviour
     // find 'face and back' renderers in children
     private void Awake()
     {
-        foreach(MeshRenderer face in GetComponentsInChildren<MeshRenderer>())
-        {
-            if(face.gameObject.name == "Face")
-            {
-                _faceRenderer = face;
-            }
-            else if(face.gameObject.name == "Back")
-            {
-                _backRenderer = face;
-            }
-        }
-
-        if (_faceRenderer == null) Debug.LogError("CardVisual: No child named 'Face' found.", this);
-        if (_backRenderer == null) Debug.LogError("CardVisual: No child named 'Back' found.", this);
-
         // for testing
-        _card = new Card(Suit.Hearts, Rank.Ace);
+        _card = new(Suit.Hearts, Rank.Ace);
         _isFaceUp = true;
         LoadFaceTexture();
     }
