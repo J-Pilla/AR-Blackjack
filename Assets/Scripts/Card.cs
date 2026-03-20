@@ -29,17 +29,7 @@ public class Card
     /// <returns>
     /// String in the format "card-suit-rank".
     /// </returns>
-    public string ResourcePath { get { return $"card-{_suit}-{(int)(_rank < Rank.Ace ? _rank : Rank.LowAce)}".ToLower(); } } // e.g., "card-hearts-1" || "card-spades-13" 
-
-    // methods
-    /// <summary>
-    /// changes Ace to LowAce, reducing the card's value to 1
-    /// </summary>
-    public void LowerAce()
-    {
-        if (_rank == Rank.Ace)
-            _rank = Rank.LowAce;
-    }
+    public string ResourcePath { get => $"card-{_suit}-{(int)(_rank < Rank.Ace ? _rank : Rank.LowAce)}".ToLower(); } // e.g., "card-hearts-1" || "card-spades-13" 
 
     // constructors
     public Card()
@@ -56,7 +46,17 @@ public class Card
         _rank = rank;
     }
 
-    public override string ToString() { return $"Card; _id: {_id}, _rank: {_rank}, _suit: {_suit}"; }
+    // methods
+    /// <summary>
+    /// changes Ace to LowAce, reducing the card's value to 1
+    /// </summary>
+    public void LowerAce()
+    {
+        if (_rank == Rank.Ace)
+            _rank = Rank.LowAce;
+    }
+
+    public override string ToString() => $"Card; _id: {_id}, _rank: {_rank}, _suit: {_suit}";
 }
 
 public enum Suit
