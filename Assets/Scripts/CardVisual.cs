@@ -9,7 +9,7 @@ public class CardVisual : MonoBehaviour
     [SerializeField] private bool _isFaceUp; // this field should be hidden in the inspector later, but for testing purposes it's shown for now.
 
     // properties
-    public Card Card { get { return _card; } }
+    public Card Card { get => _card; }
 
     // find 'face and back' renderers in children
     private void Awake()

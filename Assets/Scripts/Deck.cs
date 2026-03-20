@@ -20,7 +20,7 @@ public static class Deck
     public const int Size = DeckSize * DeckCount;
 
     // properties
-    public static int ShufflePoint { get { return _shufflePoint; } }
+    public static int ShufflePoint { get => _shufflePoint; }
 
     // methods
     /// <summary>
