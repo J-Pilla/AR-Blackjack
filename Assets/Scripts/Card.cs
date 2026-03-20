@@ -1,70 +1,85 @@
-using UnityEngine;
+/// <summary>
+/// handle the data aspect of a card
+/// </summary>
+public class Card
+{
+    // fields
+    public int _id;
+    public Rank _rank;
+    public Suit _suit;
 
-// handle the data aspect of a card.
+    // properties
+    public int Value
+    {
+        get
+        {
+            if (_rank == Rank.Ace) return 11; // Ace is worth 11
+
+            if (_rank > Rank.Ten) return 10; // Jack, Queen, and King are worth 10
+
+            return (int)_rank;
+        }
+    }
+
+    /// <summary>
+    /// Generates the resource path used by the CardVisual or FaceChanger to load the card-face texture.<br/>
+    /// This matches the naming convention for the card-face textures in the Resources folder "card-suit-rank".
+    /// </summary>
+    /// <returns>
+    /// String in the format "card-suit-rank".
+    /// </returns>
+    public string ResourcePath { get { return $"card-{_suit}-{(int)(_rank < Rank.Ace ? _rank : Rank.LowAce)}".ToLower(); } } // e.g., "card-hearts-1" || "card-spades-13" 
+
+    // methods
+    /// <summary>
+    /// changes Ace to LowAce, reducing the card's value to 1
+    /// </summary>
+    public void LowerAce()
+    {
+        if (_rank == Rank.Ace)
+            _rank = Rank.LowAce;
+    }
+
+    // constructors
+    public Card()
+    {
+        _id = Deck.DistributeCardId();
+        _rank = (Rank)(_id % 13 + 2);
+        _suit = (Suit)(_id % 4);
+    }
+
+    [System.Obsolete("Use the default constructor outside of forcing cards for testing")]
+    public Card(Suit suit, Rank rank)
+    {
+        _suit = suit;
+        _rank = rank;
+    }
+
+    public override string ToString() { return $"Card; _id: {_id}, _rank: {_rank}, _suit: {_suit}"; }
+}
 
 public enum Suit
 {
-    Hearts,
-    Diamonds,
     Clubs,
+    Diamonds,
+    Hearts,
     Spades
 }
 
 public enum Rank
 {
-    Ace = 1,
-    Two = 2,
-    Three = 3,
-    Four = 4,
-    Five = 5,
-    Six = 6,
-    Seven = 7,
-    Eight = 8,
-    Nine = 9,
-    Ten = 10,
-    Jack = 11,
-    Queen = 12,
-    King = 13
-}
-public class Card
-{
-    public Suit Suit { get; private set; }
-    public Rank Rank { get; private set; }
-
-    public Card(Suit suit, Rank rank)
-    {
-        Suit = suit;
-        Rank = rank;
-    }
-
-    /// <summary>
-    /// does not require summary.
-    /// </summary>
-    /// <returns></returns>
-    public int GetValue()
-    {
-        if (Rank == Rank.Ace)
-        {
-            return 11; // value of Ace is set to 11 here, the GameManager or a HandScript will handle the dual value of Ace (1 or 11) during gameplay.
-        }
-        if ((int)Rank >= 10)
-        {
-            return 10; // 10, J, Q, K
-        }
-        return (int)Rank; // 2-9 are worth their face value
-    }
-
-    /// <summary>
-    /// Generates the resource path used by the CardVisual or FaceChanger to load the card-face texture.
-    /// This matches the naming convention for the card-face textures in the Resources folder "card-suit-rank".
-    /// </summary>
-    /// <returns>
-    ///     String in the format "card-suit-rank".
-    /// </returns>
-    public string ResourcePath()
-    {
-        string suitName = Suit.ToString().ToLower();
-        int rankValue = (int)Rank;
-        return $"card-{suitName}-{rankValue}"; // e.g., "card-hearts-1" || "card-spades-13"
-    }
+    LowAce = 1,
+    Two,
+    Three,
+    Four,
+    Five,
+    Six,
+    Seven,
+    Eight,
+    Nine,
+    Ten,
+    Jack,
+    Queen,
+    King,
+    Ace
 }
