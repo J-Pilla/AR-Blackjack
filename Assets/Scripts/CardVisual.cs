@@ -2,17 +2,14 @@ using UnityEngine;
 
 public class CardVisual : MonoBehaviour
 {
+    // fields
+    [SerializeField] private MeshRenderer _faceRenderer;
+    [SerializeField] private MeshRenderer _backRenderer;
+    [SerializeField] private Card _card;
+    [SerializeField] private bool _isFaceUp; // this field should be hidden in the inspector later, but for testing purposes it's shown for now.
 
-    /*
-     * I am using camelCase for the public fields, and for the private fields I am using _camelCase
-     */
-    public Card card;
-    public bool isFaceUp; // this field should be hidden in the inspector later, but for testing purposes it's shown for now.
-
-    // private refs
-    private MeshRenderer _faceRenderer;
-    private MeshRenderer _backRenderer;
-
+    // properties
+    public Card Card { get { return _card; } }
 
     // find 'face and back' renderers in children
     private void Awake()
@@ -33,8 +30,8 @@ public class CardVisual : MonoBehaviour
         if (_backRenderer == null) Debug.LogError("CardVisual: No child named 'Back' found.", this);
 
         // for testing
-        card = new Card(Suit.Hearts, Rank.Ace);
-        isFaceUp = true;
+        _card = new Card(Suit.Hearts, Rank.Ace);
+        _isFaceUp = true;
         LoadFaceTexture();
     }
 
@@ -45,8 +42,8 @@ public class CardVisual : MonoBehaviour
     /// <param name="isFaceUp">the Face-up state</param>
     public void Initialize(Card card, bool isFaceUp = false)
     {
-        this.card = card;
-        this.isFaceUp = isFaceUp;
+        _card = card;
+        _isFaceUp = isFaceUp;
         LoadFaceTexture();
     }
 
@@ -56,14 +53,14 @@ public class CardVisual : MonoBehaviour
     /// </summary>
     private void LoadFaceTexture()
     {
-        string path = card.ResourcePath;
+        string path = _card.ResourcePath;
         Texture texture = Resources.Load<Texture>(path);
 
         //Debug.Log($"CardVisual: Loading texture for card '{Card}' from path '{path}'. Texture found: {texture != null}");
 
         if (texture == null)
         {
-            Debug.LogError($"CardVisual: Could not load texture at path '{path}' for card '{card}'.");
+            Debug.LogError($"CardVisual: Could not load texture at path '{path}' for card '{_card}'.");
             return;
         }
         var block = new MaterialPropertyBlock();
