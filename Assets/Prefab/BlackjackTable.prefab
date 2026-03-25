@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4014108305519415138}
   m_Layer: 0
-  m_Name: PlayerCards
+  m_Name: PlayerCardSlots
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -76,7 +76,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6174861448185704683}
   m_Layer: 0
-  m_Name: PlayerCards
+  m_Name: DealerCardSlots
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
