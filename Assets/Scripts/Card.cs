@@ -1,7 +1,6 @@
 /// <summary>
 /// handle the data aspect of a card
 /// </summary>
-[System.Serializable]
 public class Card
 {
     // fields
