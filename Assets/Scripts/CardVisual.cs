@@ -146,7 +146,7 @@ public class CardVisual : MonoBehaviour
         // Phase 1 (0 to 90)
         Quaternion edgeRotation = Quaternion.Euler(
             startRotation.eulerAngles.x,
-            90f,
+            startRotation.eulerAngles.y + 90f,
             startRotation.eulerAngles.z);
 
         while (elapsed < halfDuration)
@@ -166,7 +166,7 @@ public class CardVisual : MonoBehaviour
         // Phase 2 (90 back to 0)
         Quaternion endRotation = Quaternion.Euler(
             startRotation.eulerAngles.x,
-            0f,
+            startRotation.eulerAngles.y + 180f, // continue rotating in the same direction to complete the flip
             startRotation.eulerAngles.z);
 
         elapsed = 0f;

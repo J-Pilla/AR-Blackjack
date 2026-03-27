@@ -67,8 +67,8 @@ public class UIManager : MonoBehaviour
         SetPanelActive(_gamePanel, true);
         SetPanelActive(_resultPanel, false);
 
-        _dealerScoreText.text = "Dealer: ?";
-        _playerScoreText.text = "You: ?";
+        _dealerScoreText.text = "Dealer: [?]";
+        _playerScoreText.text = "You: [?]";
         SetActionsInteractable(false);
     }
 
@@ -78,7 +78,7 @@ public class UIManager : MonoBehaviour
     public void ShowPlayerTurn(int playerScore, int dealerVisibleCard)
     {
         _playerScoreText.text = $"You: {playerScore}";
-        _dealerScoreText.text = $"Dealer: {dealerVisibleCard} + ?";
+        _dealerScoreText.text = $"Dealer: {dealerVisibleCard} + [?]";
         SetActionsInteractable(true);
     }
 
@@ -114,7 +114,7 @@ public class UIManager : MonoBehaviour
     {
         SetPanelActive(_resultPanel, true);
         SetActionsInteractable(false);
-
+        _playerScoreText.color = result == GameResult.PlayerWins || result == GameResult.Blackjack ? Color.green : Color.red;
         _playerScoreText.text = $"You: {playerScore}";
         _dealerScoreText.text = $"Dealer: {dealerScore}";
 
@@ -123,7 +123,7 @@ public class UIManager : MonoBehaviour
             GameResult.Blackjack => "Blackjack! You Win!",
             GameResult.PlayerWins => "You Win!",
             GameResult.DealerWins => "Dealer Wins",
-            GameResult.Push => "Push — It's a Tie",
+            GameResult.Push => "It's a Tie",
             _ => string.Empty
         };
     }

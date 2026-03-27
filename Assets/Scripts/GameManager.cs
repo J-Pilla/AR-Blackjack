@@ -240,7 +240,7 @@ public class GameManager : MonoBehaviour
         while (_dealer.GetValue() < 17)
         {
             yield return new WaitForSeconds(_dealerDelay);
-            yield return StartCoroutine(DealCardToDealer(faceUp: true));
+            yield return StartCoroutine(DealCardToDealer(true));
             _uiManager.UpdateDealerScore(_dealer.GetValue());
         }
 
@@ -352,7 +352,13 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        visual.Initialize(card, faceUp);
+        visual.Initialize(card, false);
+
+        if (faceUp)
+        {
+            visual.FlipFaceUp(); // Only face-up if specified, so we can deal the dealer's hole card face-down
+        }
+
         visualList.Add(visual);
     }
 
