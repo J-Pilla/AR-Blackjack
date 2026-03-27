@@ -18,9 +18,9 @@ public class GameManager : MonoBehaviour
 
     [Header("Table Layout")]
     [Tooltip("How far apart cards are spaced on the X-axis.")]
-    [SerializeField] private float _cardSpacing = 0.08f;
+    [SerializeField] private float _cardSpacing = 0.5f;
     [Tooltip("Small Z and Y step so cards fan slightly rather than stacking exactly.")]
-    [SerializeField] private float _cardStackOffset = 0.002f;
+    [SerializeField] private float _cardStackOffset = 0.1f;
 
     [Header("Timing")]
     [SerializeField] private float _dealDelay = 0.4f;      // pause between each dealt card

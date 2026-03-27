@@ -126,6 +126,15 @@ public class UIManager : MonoBehaviour
             GameResult.Push => "It's a Tie",
             _ => string.Empty
         };
+
+        _resultText.color = result switch
+        {
+            GameResult.PlayerWins => Color.green,
+            GameResult.Blackjack => Color.green,
+            GameResult.DealerWins => Color.red,
+            GameResult.Push => Color.yellow,
+            _ => Color.white
+        };
     }
 
     /// <summary>
