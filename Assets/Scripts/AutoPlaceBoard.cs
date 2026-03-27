@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 
@@ -116,7 +117,9 @@ public class AutoPlaceBoard : MonoBehaviour
         bool tapped = false;
 
 #if UNITY_EDITOR
-        tapped = Input.GetMouseButtonDown(0);
+
+        //tapped = Input.GetMouseButtonDown(0);
+        tapped = Mouse.current.leftButton.wasPressedThisFrame; // New Input System way to detect mouse click
 #else
         if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
             tapped = true;

@@ -31,6 +31,7 @@ public class CardVisual : MonoBehaviour
         {
             Debug.LogError($"CardVisual on '{gameObject.name}': face or back renderer is not assigned.", this);
         }
+        Debug.Log($"CardVisual on '{gameObject.name}': Awake complete. Face renderer: {_faceRenderer != null}, Back renderer: {_backRenderer != null}");
     }
 
 
@@ -61,8 +62,11 @@ public class CardVisual : MonoBehaviour
 
     public void FlipFaceDown()
     {
-        if (!_isFaceUp || _isFlipping) return;
-        StartCoroutine(FlipCoroutine(targetFaceUp: false));
+        if (!_isFaceUp || _isFlipping)
+        { 
+            return; 
+        }
+        StartCoroutine(FlipCoroutine( false));
     }
 
 
@@ -102,6 +106,8 @@ public class CardVisual : MonoBehaviour
     /// <summary>
     /// Immediately sets the face-up state without animation if animate is false.
     /// </summary>
+    // Obsolete
+
     private void SetFaceUp(bool faceUp, bool animate)
     {
         if (_isFlipping) // just to be safe, but ideally the GameManager should never call this while a flip is in progress

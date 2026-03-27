@@ -35,7 +35,7 @@ public class GameManager : MonoBehaviour
 
     // The spawned board and the transforms that act as card anchors
     private GameObject _board;
-    private Transform _playerCardRoot;
+    private Transform _playerCardRoot; // cards are spawned as children of these roots, which are positioned in the table prefab
     private Transform _dealerCardRoot;
 
     // To track all spawned CardVisual objects so we can destroy them on reset
