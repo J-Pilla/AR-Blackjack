@@ -92,7 +92,7 @@ public class GameManager : MonoBehaviour
     /// Called once by AutoPlaceBoard after the user taps to confirm placement.
     /// Finds the card root transforms inside the board prefab and starts dealing.
     /// </summary>
-    private void OnBoardPlaced(GameObject board)
+    private void OnBoardPlaced(GameObject board) // 
     {
         _board = board;
 
@@ -225,9 +225,9 @@ public class GameManager : MonoBehaviour
 
     /// <summary>
     /// Runs the dealer's automated turn:
-    ///   1. Reveal the hole card.
-    ///   2. Hit until the dealer's hand value is 17 or more (casino rules).
-    ///   3. Evaluate.
+    /// - Reveal the hole card.
+    /// - Hit until the dealer's hand value is 17 or more.
+    /// - Evaluate.
     /// </summary>
     private IEnumerator DealerTurnCoroutine()
     {
@@ -332,7 +332,7 @@ public class GameManager : MonoBehaviour
     {
         int index = visualList.Count;
 
-        // Position: spread along X, tiny Y lift and Z push per card
+        // spawned as child of the root so they move with the table, and position them in a row with some spacing
         Vector3 localPos = new(
             index * _cardSpacing,
             index * _cardStackOffset,
