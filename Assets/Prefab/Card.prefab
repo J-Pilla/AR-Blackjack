@@ -48,11 +48,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CardVisual
   _faceRenderer: {fileID: 8193754175747366410}
   _backRenderer: {fileID: 1534105977852749591}
-  _card:
-    _id: 0
-    _rank: 2
-    _suit: 0
-  _isFaceUp: 0
 --- !u!1 &6996169206993394485
 GameObject:
   m_ObjectHideFlags: 0
@@ -80,7 +75,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6996169206993394485}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
