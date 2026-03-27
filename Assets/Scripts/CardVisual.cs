@@ -59,6 +59,12 @@ public class CardVisual : MonoBehaviour
         StartCoroutine(FlipCoroutine(true));
     }
 
+    public void FlipFaceDown()
+    {
+        if (!_isFaceUp || _isFlipping) return;
+        StartCoroutine(FlipCoroutine(targetFaceUp: false));
+    }
+
 
 
     /* Private methods */
@@ -109,6 +115,7 @@ public class CardVisual : MonoBehaviour
             StartCoroutine(FlipCoroutine(faceUp));
             return;
         }
+
         _isFaceUp = faceUp;
         _faceRenderer.gameObject.SetActive(faceUp);
         _backRenderer.gameObject.SetActive(!faceUp);

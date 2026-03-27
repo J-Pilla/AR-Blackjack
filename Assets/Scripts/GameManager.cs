@@ -96,26 +96,27 @@ public class GameManager : MonoBehaviour
     {
         _board = board;
 
-        // The BlackjackTable prefab has two children named "PlayerCards"
+        // The BlackjackTable prefab originaly has two children named "PlayerCards"
         // one at z = -0.5 (dealer) and one at z = +0.5 (player).
-        // We find them by iterating children and picking by local Z sign.
-        // If your prefab uses different names, adjust the strings below.
+        // I renamed them to "PlayerCardSlots" and "DealerCardSlots" for clarity
+        // and we find them here by name.
         Transform[] roots = board.GetComponentsInChildren<Transform>();
         foreach (Transform t in roots)
         {
-            if (t.gameObject.name == "PlayerCards")
+            if (t.gameObject.name == "PlayerCardSlots")
             {
-                if (t.localPosition.z > 0)
-                    _playerCardRoot = t;
-                else
-                    _dealerCardRoot = t;
+
+                _playerCardRoot = t;
+            }
+            else if (t.gameObject.name == "DealerCardSlots")
+            { 
+                _dealerCardRoot = t;
             }
         }
 
         if (_playerCardRoot == null || _dealerCardRoot == null)
         {
-            Debug.LogError("GameManager: Could not find PlayerCards roots in the board prefab. " +
-                           "Make sure the prefab has two children named 'PlayerCards'.");
+            Debug.LogError("GameManager: Could not find PlayerCards roots in the board prefab.");
             return;
         }
 
@@ -142,13 +143,13 @@ public class GameManager : MonoBehaviour
             Deck.Shuffle();
 
         // Deal order: player, dealer (face down), player, dealer (face up)
-        yield return StartCoroutine(DealCardToPlayer(faceUp: true));
+        yield return StartCoroutine(DealCardToPlayer( true));
         yield return new WaitForSeconds(_dealDelay);
-        yield return StartCoroutine(DealCardToDealer(faceUp: false));  // hole card
+        yield return StartCoroutine(DealCardToDealer(false));  // hole card
         yield return new WaitForSeconds(_dealDelay);
-        yield return StartCoroutine(DealCardToPlayer(faceUp: true));
+        yield return StartCoroutine(DealCardToPlayer(true));
         yield return new WaitForSeconds(_dealDelay);
-        yield return StartCoroutine(DealCardToDealer(faceUp: true));
+        yield return StartCoroutine(DealCardToDealer(true));
         yield return new WaitForSeconds(_dealDelay);
 
         // Check for immediate blackjack
