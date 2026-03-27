@@ -1,5 +1,13 @@
 ﻿using static UnityEngine.Random;
 
+
+/*
+ * Changes from original:
+    - Added IsReady property so GameManager can check before the first deal.
+    - Added NeedsReshuffle property so GameManager can reshuffle between rounds
+      when the shoe passes the shuffle point.
+ */
+
 /// <summary>
 /// static class representing a deck of cards,
 /// uses an array of integers to initialize unique Card objects
@@ -16,13 +24,26 @@ public static class Deck
     private const int DeckSize = 52; // standard 52 card deck, no jokers
     private const int DeckCount = 6; // in a casino, 6 decks are used
     private const int ShuffleCount = 4; // arbitrary number to make it "more random"
-
     public const int Size = DeckSize * DeckCount;
 
     // properties
     public static int ShufflePoint { get => _shufflePoint; }
 
-    // methods
+    /// <summary>
+    /// True once Shuffle() has been called at least once.
+    /// GameManager checks this before the first deal.
+    /// </summary>
+    public static bool IsReady => _isInitialized;
+
+    /// <summary>
+    /// True when the next card to be distributed is past the shuffle point.
+    /// GameManager checks this between rounds.
+    /// </summary>
+    public static bool NeedsReshuffle => _cardIndex >= _shufflePoint;
+
+
+    /* public APIs */
+
     /// <summary>
     /// randomize the order of the card ids in the deck
     /// and sets deckIndex back down to 0
@@ -46,6 +67,20 @@ public static class Deck
         Cut();
         SetShufflePoint();
     }
+
+
+    /// <summary>
+    /// Returns the next card id from the shoe. Forces a shuffle if exhausted.
+    /// </summary>
+    public static int DistributeCardId()
+    {
+        if (_cardIndex >= Size)
+            Shuffle();
+
+        return _cardIds[_cardIndex++];
+    }
+
+    /* private methods */
 
     /// <summary>
     /// initializes the deck so each element carries a card id equal to the index
@@ -89,13 +124,5 @@ public static class Deck
         const int max = Size - DeckCount * 10;
         // with 6 decks the range is 60 - 75
         _shufflePoint = Range(min, max);
-    }
-
-    public static int DistributeCardId()
-    {
-        if (_cardIndex >= Size)
-            Shuffle(); // force a shuffle if the entire deck has been used
-
-        return _cardIds[_cardIndex++];
     }
 }
