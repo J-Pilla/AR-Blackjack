@@ -44,7 +44,7 @@ public class CardVisual : MonoBehaviour
     {
         _card = card;
         LoadFaceTexture();
-        // TODO: set back texture if needed
+        SetFaceUp(isFaceUp,false);
     }
 
     /// <summary>
