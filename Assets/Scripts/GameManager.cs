@@ -105,12 +105,19 @@ public class GameManager : MonoBehaviour
         {
             if (t.gameObject.name == "PlayerCardSlots")
             {
-
                 _playerCardRoot = t;
             }
             else if (t.gameObject.name == "DealerCardSlots")
-            { 
+            {
                 _dealerCardRoot = t;
+            }
+            else if (t.gameObject.name == "HitButton")
+            {
+                _uiManager.setHitButton(t.gameObject);
+            }
+            else if (t.gameObject.name == "StandButton")
+            {
+                _uiManager.setStandButton(t.gameObject);
             }
         }
 
