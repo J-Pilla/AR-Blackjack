@@ -1967,9 +1967,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa8453cfe03271c4fa95d4444a707ee4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TitleFlash
-  speed: 6
-  minBrightness: 0.85
-  maxBrightness: 1.5
+  speed: 11
+  minBrightness: 0.7
+  maxBrightness: 1.3
 --- !u!1 &2146256623
 GameObject:
   m_ObjectHideFlags: 0
