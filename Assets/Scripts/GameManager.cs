@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 /// <summary>
@@ -118,6 +119,14 @@ public class GameManager : MonoBehaviour
             else if (t.gameObject.name == "StandButton")
             {
                 _uiManager.setStandButton(t.gameObject);
+            }
+            else if (t.gameObject.name == "DealerScoreTile")
+            {
+                _uiManager.setDealerText(t.gameObject.GetComponentInChildren<TextMeshPro>());
+            }
+            else if (t.gameObject.name == "PlayerScoreTile")
+            {
+                _uiManager.setPlayerText(t.gameObject.GetComponentInChildren<TextMeshPro>());
             }
         }
 
