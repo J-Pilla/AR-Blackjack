@@ -27,7 +27,10 @@ public class UIManager : MonoBehaviour
     [Header("GameManager Reference")]
     [SerializeField] private GameManager _gameManager;
 
+    private GameObject _newHitButton;
+    private GameObject _newStandButton;
 
+    private bool _hitStandButtonsActive;
 
     /* unity lifecycle */
     private void Start()
@@ -41,6 +44,37 @@ public class UIManager : MonoBehaviour
         SetPanelActive(_placementHintPanel, true);
         SetPanelActive(_gamePanel, false);
         SetPanelActive(_resultPanel, false);
+    }
+    
+    private void Update()
+    {
+        if (_hitStandButtonsActive && Input.GetMouseButtonDown(0)) 
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit))
+            {
+                if (hit.transform.gameObject == _newHitButton)
+                {
+                    _gameManager.OnPlayerHit();
+                }
+                else if (hit.transform.gameObject == _newStandButton)
+                {
+                    _gameManager.OnPlayerStand();
+                }
+            }
+        }
+    }
+
+    public void setHitButton(GameObject hitButton)
+    {
+        _newHitButton = hitButton;
+    }
+
+    public void setStandButton(GameObject standButton)
+    {
+        _newStandButton = standButton;
     }
 
     /* Public API — called by GameManager */
@@ -145,6 +179,13 @@ public class UIManager : MonoBehaviour
     {
         _hitButton.interactable = interactable;
         _standButton.interactable = interactable;
+
+        _hitStandButtonsActive = interactable;
+
+        Color objectColor = interactable ? Color.white : Color.gray;
+
+        _newHitButton.GetComponent<Renderer>().material.SetColor("_BaseColor", objectColor);
+        _newStandButton.GetComponent<Renderer>().material.SetColor("_BaseColor", objectColor);
     }
 
     /* private helper methods */
