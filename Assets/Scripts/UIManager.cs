@@ -27,6 +27,9 @@ public class UIManager : MonoBehaviour
     [Header("GameManager Reference")]
     [SerializeField] private GameManager _gameManager;
 
+    private TextMeshPro _newPlayerScoreText;
+    private TextMeshPro _newDealerScoreText;
+
     private GameObject _newHitButton;
     private GameObject _newStandButton;
 
@@ -77,6 +80,16 @@ public class UIManager : MonoBehaviour
         _newStandButton = standButton;
     }
 
+    public void setPlayerText(TextMeshPro playerText)
+    {
+        _newPlayerScoreText = playerText;
+    }
+
+    public void setDealerText(TextMeshPro dealerText)
+    {
+        _newDealerScoreText = dealerText;
+    }
+
     /* Public API — called by GameManager */
 
     /// <summary>
@@ -103,6 +116,9 @@ public class UIManager : MonoBehaviour
 
         _dealerScoreText.text = "Dealer: [?]";
         _playerScoreText.text = "You: [?]";
+
+        _newDealerScoreText.text = "?";
+        _newPlayerScoreText.text = "?";
         SetActionsInteractable(false);
     }
 
@@ -113,6 +129,9 @@ public class UIManager : MonoBehaviour
     {
         _playerScoreText.text = $"You: {playerScore}";
         _dealerScoreText.text = $"Dealer: {dealerVisibleCard} + [?]";
+
+        _newDealerScoreText.text = $"{dealerVisibleCard}";
+        _newPlayerScoreText.text = $"{playerScore}";
         SetActionsInteractable(true);
     }
 
@@ -131,6 +150,8 @@ public class UIManager : MonoBehaviour
     public void UpdateDealerScore(int score)
     {
         _dealerScoreText.text = $"Dealer: {score}";
+        _newDealerScoreText.text = $"{score}";
+        
     }
 
     /// <summary>
@@ -139,6 +160,7 @@ public class UIManager : MonoBehaviour
     public void UpdatePlayerScore(int score)
     {
         _playerScoreText.text = $"You: {score}";
+        _newPlayerScoreText.text = $"{score}";
     }
 
     /// <summary>
@@ -151,6 +173,9 @@ public class UIManager : MonoBehaviour
         _playerScoreText.color = result == GameResult.PlayerWins || result == GameResult.Blackjack ? Color.green : Color.red;
         _playerScoreText.text = $"You: {playerScore}";
         _dealerScoreText.text = $"Dealer: {dealerScore}";
+
+        _newDealerScoreText.text = $"{dealerScore}";
+        _newPlayerScoreText.text = $"{playerScore}";
 
         _resultText.text = result switch
         {
