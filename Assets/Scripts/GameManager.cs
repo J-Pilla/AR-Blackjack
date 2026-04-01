@@ -36,6 +36,8 @@ public class GameManager : MonoBehaviour
 
     // The spawned board and the transforms that act as card anchors
     private GameObject _board;
+    private GameObject _playingBoard;
+    private GameObject _bettingBoard;
     private Transform _playerCardRoot; // cards are spawned as children of these roots, which are positioned in the table prefab
     private Transform _dealerCardRoot;
 
@@ -43,11 +45,15 @@ public class GameManager : MonoBehaviour
     private readonly List<CardVisual> _playerCardVisuals = new();
     private readonly List<CardVisual> _dealerCardVisuals = new();
 
+    // Total player chips
+    private int _totalChips = 1000;
+
 
     /* Game state management */
     private enum GamePhase
     {
         WaitingForPlacement,
+        Betting,
         Dealing,
         PlayerTurn,
         DealerTurn,
@@ -75,7 +81,7 @@ public class GameManager : MonoBehaviour
 
         // Listen for the AR board being placed
         _arService.OnBoardPlaced += OnBoardPlaced;
-
+        
         // Show the "aim at a surface" instruction
         _uiManager.ShowPlacementHint();
     }
@@ -84,6 +90,9 @@ public class GameManager : MonoBehaviour
     {
         if (_arService != null)
             _arService.OnBoardPlaced -= OnBoardPlaced;
+
+        if (_bettingBoard != null)
+            _bettingBoard.GetComponent<BettingManager>().OnBetPlaced -= HandleBetPlaced;
     }
 
 
@@ -104,7 +113,17 @@ public class GameManager : MonoBehaviour
         Transform[] roots = board.GetComponentsInChildren<Transform>();
         foreach (Transform t in roots)
         {
-            if (t.gameObject.name == "PlayerCardSlots")
+            if(t.gameObject.name == "BoardRoot")
+            {
+                _playingBoard = t.gameObject;
+            }
+            else if (t.gameObject.name == "BettingRoot")
+            {
+                _bettingBoard = t.gameObject;
+                _bettingBoard.GetComponent<BettingManager>().SetUpBet(_totalChips);
+                _bettingBoard.GetComponent<BettingManager>().OnBetPlaced += HandleBetPlaced;
+            }
+            else if (t.gameObject.name == "PlayerCardSlots")
             {
                 _playerCardRoot = t;
             }
@@ -139,8 +158,24 @@ public class GameManager : MonoBehaviour
         ClearStaticCards(_playerCardRoot);
         ClearStaticCards(_dealerCardRoot);
 
+        _playingBoard.SetActive(false);
+        _uiManager.ShowBettingState();
+
+        _phase = GamePhase.Betting;
+
+        //StartCoroutine(DealInitialCards());
+    }
+
+    private void HandleBetPlaced(int totalBet)
+    {
+        Debug.Log(totalBet);
+        // Now you can unlock dealing, update UI, etc.
+        _bettingBoard.SetActive(false);
+        _playingBoard.SetActive(true);
+
         StartCoroutine(DealInitialCards());
     }
+
 
 
     /* Dealing and player actions */
@@ -307,6 +342,11 @@ public class GameManager : MonoBehaviour
         else
             result = GameResult.Push;
 
+        if(result == GameResult.PlayerWins || result == GameResult.Blackjack)
+            _totalChips += _bettingBoard.GetComponent<BettingManager>().GetBet();
+        else if (result == GameResult.DealerWins)
+            _totalChips -= _bettingBoard.GetComponent<BettingManager>().GetBet();
+
         _uiManager.ShowResult(result, playerValue, dealerValue);
     }
 
@@ -315,7 +355,7 @@ public class GameManager : MonoBehaviour
 
     /// <summary>
     /// Called from UIManager's "New Round" button.
-    /// Destroys all card visuals, resets player data, and deals again.
+    /// Destroys all card visuals, resets player data, and returns to betting state.
     /// The AR table stays in place.
     /// </summary>
     public void StartNewRound()
@@ -332,7 +372,13 @@ public class GameManager : MonoBehaviour
         _humanPlayer.Reset();
         _dealer.Reset();
 
-        StartCoroutine(DealInitialCards());
+        _bettingBoard.SetActive(true);
+        _playingBoard.SetActive(false);
+
+        _bettingBoard.GetComponent<BettingManager>().SetUpBet(_totalChips);
+        _uiManager.ShowBettingState();
+
+        _phase = GamePhase.Betting;
     }
 
 
