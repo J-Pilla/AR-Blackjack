@@ -177,7 +177,7 @@ GameObject:
   - component: {fileID: 207658180}
   - component: {fileID: 207658179}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Cards
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -271,15 +271,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: cd7bfbe2fe162be469bcafa72f07c39d, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -427,7 +427,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_RaycastPadding: {x: 0, y: 35, z: 0, w: 35}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -839,7 +839,7 @@ GameObject:
   - component: {fileID: 889613032}
   - component: {fileID: 889613031}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Button Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1012,7 +1012,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_RaycastPadding: {x: 0, y: 35, z: 0, w: 35}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -1047,7 +1047,7 @@ GameObject:
   - component: {fileID: 1039302557}
   - component: {fileID: 1039302556}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Title Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1240,7 +1240,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1353,7 +1353,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1262591004}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -12}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1362,8 +1362,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -14, y: -190}
-  m_SizeDelta: {x: 60, y: 30}
+  m_AnchoredPosition: {x: 13, y: -254}
+  m_SizeDelta: {x: 80, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1262591006
 MonoBehaviour:
@@ -1607,7 +1607,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1841,7 +1841,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -2037,7 +2037,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_RaycastPadding: {x: 0, y: 45, z: 0, w: 45}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -2247,8 +2247,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 300, y: 80}
+  m_AnchoredPosition: {x: 0, y: -21}
+  m_SizeDelta: {x: 225, y: 450}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2146256625
 MonoBehaviour:
@@ -2271,13 +2271,13 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: "Blackjack Instructions:\n\n1. Each player is dealt 2 cards. The dealer
-    also gets 2 cards (1 face up, 1 face down).\n2. Number cards = their value; Face
-    cards (J, Q, K) = 10; Ace = 1 or 11.\n3. Players try to get as close to 21 as
-    possible without going over.\n4. On your turn, choose to:\n\tHit \u2013 take
-    another card.\n\tStand \u2013 keep your current hand.\n6. If your hand goes over
-    21, you bust and lose.\n7. After all players finish, the dealer reveals their
-    hidden card and must hit until 17 or higher.\n8. The closest to 21 without busting
-    wins!"
+    also gets 2 cards (1 face up, 1 face down).\n\n2. Number cards = their value;
+    Face cards (J, Q, K) = 10; Ace = 1 or 11.\n\n3. Players try to get as close to
+    21 as possible without going over.\n\n4. On your turn, choose to:\n\tHit \u2013
+    take another card.\n\tStand \u2013 keep your current hand.\n\n5. If your hand
+    goes over 21, you bust and lose.\n\n6. After all players finish, the dealer reveals
+    their hidden card and must hit until 17 or higher.\n\n7. The closest to 21 without
+    busting wins!"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2286,8 +2286,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -2304,14 +2304,14 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 12
-  m_fontSizeBase: 12
+  m_fontSize: 13
+  m_fontSizeBase: 13
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_fontStyle: 1
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
