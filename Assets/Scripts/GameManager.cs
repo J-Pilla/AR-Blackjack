@@ -110,6 +110,7 @@ public class GameManager : MonoBehaviour
         // one at z = -0.5 (dealer) and one at z = +0.5 (player).
         // I renamed them to "PlayerCardSlots" and "DealerCardSlots" for clarity
         // and we find them here by name.
+        // Also finding UI elements and boards for betting and playing 
         Transform[] roots = board.GetComponentsInChildren<Transform>();
         foreach (Transform t in roots)
         {
@@ -162,13 +163,10 @@ public class GameManager : MonoBehaviour
         _uiManager.ShowBettingState();
 
         _phase = GamePhase.Betting;
-
-        //StartCoroutine(DealInitialCards());
     }
 
     private void HandleBetPlaced(int totalBet)
     {
-        Debug.Log(totalBet);
         // Now you can unlock dealing, update UI, etc.
         _bettingBoard.SetActive(false);
         _playingBoard.SetActive(true);
