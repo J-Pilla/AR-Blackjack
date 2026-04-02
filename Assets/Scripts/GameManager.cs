@@ -162,13 +162,10 @@ public class GameManager : MonoBehaviour
         _uiManager.ShowBettingState();
 
         _phase = GamePhase.Betting;
-
-        //StartCoroutine(DealInitialCards());
     }
 
     private void HandleBetPlaced(int totalBet)
     {
-        Debug.Log(totalBet);
         // Now you can unlock dealing, update UI, etc.
         _bettingBoard.SetActive(false);
         _playingBoard.SetActive(true);
