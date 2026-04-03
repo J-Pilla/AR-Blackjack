@@ -105,6 +105,13 @@ public class UIManager : MonoBehaviour
         SetPanelActive(_resultPanel, false);
     }
 
+    public void ShowBettingState()
+    {
+        SetPanelActive(_placementHintPanel, false);
+        SetPanelActive(_gamePanel, false);
+        SetPanelActive(_resultPanel, false);
+    }
+
     /// <summary>
     /// Called while initial cards are being dealt. Hides action buttons.
     /// </summary>
