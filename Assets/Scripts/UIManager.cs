@@ -12,70 +12,75 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject _placementHintPanel;
     [SerializeField] private TextMeshProUGUI _placementHintText;
 
-    [Header("Game Panel")]
-    [SerializeField] private GameObject _gamePanel;
-    [SerializeField] private TextMeshProUGUI _dealerScoreText;
-    [SerializeField] private TextMeshProUGUI _playerScoreText;
-    [SerializeField] private Button _hitButton;
-    [SerializeField] private Button _standButton;
-
-    [Header("Result Panel")]
-    [SerializeField] private GameObject _resultPanel;
-    [SerializeField] private TextMeshProUGUI _resultText;
-    [SerializeField] private Button _newRoundButton;
-
     [Header("GameManager Reference")]
     [SerializeField] private GameManager _gameManager;
 
-    private TextMeshPro _newPlayerScoreText;
-    private TextMeshPro _newDealerScoreText;
+    private TextMeshPro _newResultText;
+    private GameObject _newNewRoundButton;
+    private GameObject _newResultDisplay;
 
-    private GameObject _newHitButton;
-    private GameObject _newStandButton;
+    private TextMeshPro _playerScoreText;
+    private TextMeshPro _dealerScoreText;
+
+    private GameObject _hitButton;
+    private GameObject _standButton;
 
     private bool _hitStandButtonsActive;
 
     public TextMeshPro PlayerScoreText
     {
-        get => _newPlayerScoreText;
-        set => _newPlayerScoreText = value;
+        get => _playerScoreText;
+        set => _playerScoreText = value;
     }
 
     public TextMeshPro DealerScoreText
     {
-        get => _newDealerScoreText;
-        set => _newDealerScoreText = value;
+        get => _dealerScoreText;
+        set => _dealerScoreText = value;
     }
 
     public GameObject HitButton
     {
-        get => _newHitButton;
-        set => _newHitButton = value;
+        get => _hitButton;
+        set => _hitButton = value;
     }
 
     public GameObject StandButton
     {
-        get => _newStandButton;
-        set => _newStandButton = value;
+        get => _standButton;
+        set => _standButton = value;
     }
+
+    public GameObject ResultDisplay
+    {
+        get => _newResultDisplay;
+        set => _newResultDisplay = value;
+    }
+
+    public TextMeshPro ResultText
+    {
+        get => _newResultText;
+        set => _newResultText = value;
+    }
+
+    public GameObject NewRoundButton
+    {
+        get => _newNewRoundButton;
+        set => _newNewRoundButton = value;
+    }
+
 
     /* unity lifecycle */
     private void Start()
     {
-        // button callbacks
-        _hitButton.onClick.AddListener(_gameManager.OnPlayerHit);
-        _standButton.onClick.AddListener(_gameManager.OnPlayerStand);
-        _newRoundButton.onClick.AddListener(_gameManager.StartNewRound);
-
         // at initial state, only the placement hint is visible
         SetPanelActive(_placementHintPanel, true);
-        SetPanelActive(_gamePanel, false);
-        SetPanelActive(_resultPanel, false);
+
     }
     
     private void Update()
     {
-        if (_hitStandButtonsActive && Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0))
             HandleTapInput();
     }
 
@@ -86,10 +91,15 @@ public class UIManager : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit))
         {
-            if (hit.transform.gameObject == _newHitButton)
-                _gameManager.OnPlayerHit();
-            else if (hit.transform.gameObject == _newStandButton)
-                _gameManager.OnPlayerStand();
+            if(_hitStandButtonsActive)
+            {
+                if (hit.transform.gameObject == _hitButton)
+                    _gameManager.OnPlayerHit();
+                else if (hit.transform.gameObject == _standButton)
+                    _gameManager.OnPlayerStand();
+            }
+            if (hit.transform.gameObject == _newNewRoundButton)
+                _gameManager.StartNewRound();
         }
     }
 
@@ -104,15 +114,11 @@ public class UIManager : MonoBehaviour
             _placementHintText.text = "Point your camera at a flat surface\nand tap to place the table";
 
         SetPanelActive(_placementHintPanel, true);
-        SetPanelActive(_gamePanel, false);
-        SetPanelActive(_resultPanel, false);
     }
 
     public void ShowBettingState()
     {
         SetPanelActive(_placementHintPanel, false);
-        SetPanelActive(_gamePanel, false);
-        SetPanelActive(_resultPanel, false);
     }
 
     /// <summary>
@@ -121,14 +127,10 @@ public class UIManager : MonoBehaviour
     public void ShowDealingState()
     {
         SetPanelActive(_placementHintPanel, false);
-        SetPanelActive(_gamePanel, true);
-        SetPanelActive(_resultPanel, false);
+        SetOptionsToPlay(true);
 
-        _dealerScoreText.text = "Dealer: [?]";
-        _playerScoreText.text = "You: [?]";
-
-        _newDealerScoreText.text = "?";
-        _newPlayerScoreText.text = "?";
+        _dealerScoreText.text = "?";
+        _playerScoreText.text = "?";
         SetActionsInteractable(false);
     }
 
@@ -137,11 +139,8 @@ public class UIManager : MonoBehaviour
     /// </summary>
     public void ShowPlayerTurn(int playerScore, int dealerVisibleCard)
     {
-        _playerScoreText.text = $"You: {playerScore}";
-        _dealerScoreText.text = $"Dealer: {dealerVisibleCard} + [?]";
-
-        _newDealerScoreText.text = $"{dealerVisibleCard}";
-        _newPlayerScoreText.text = $"{playerScore}";
+        _dealerScoreText.text = $"{dealerVisibleCard}";
+        _playerScoreText.text = $"{playerScore}";
         SetActionsInteractable(true);
     }
 
@@ -151,7 +150,6 @@ public class UIManager : MonoBehaviour
     public void ShowDealerTurn()
     {
         SetActionsInteractable(false);
-        _dealerScoreText.text = "Dealer is playing...";
     }
 
     /// <summary>
@@ -159,8 +157,7 @@ public class UIManager : MonoBehaviour
     /// </summary>
     public void UpdateDealerScore(int score)
     {
-        _dealerScoreText.text = $"Dealer: {score}";
-        _newDealerScoreText.text = $"{score}";
+        _dealerScoreText.text = $"{score}";
         
     }
 
@@ -169,8 +166,7 @@ public class UIManager : MonoBehaviour
     /// </summary>
     public void UpdatePlayerScore(int score)
     {
-        _playerScoreText.text = $"You: {score}";
-        _newPlayerScoreText.text = $"{score}";
+        _playerScoreText.text = $"{score}";
     }
 
     /// <summary>
@@ -178,16 +174,12 @@ public class UIManager : MonoBehaviour
     /// </summary>
     public void ShowResult(GameResult result, int playerScore, int dealerScore)
     {
-        SetPanelActive(_resultPanel, true);
         SetActionsInteractable(false);
-        _playerScoreText.color = result == GameResult.PlayerWins || result == GameResult.Blackjack ? Color.green : Color.red;
-        _playerScoreText.text = $"You: {playerScore}";
-        _dealerScoreText.text = $"Dealer: {dealerScore}";
 
-        _newDealerScoreText.text = $"{dealerScore}";
-        _newPlayerScoreText.text = $"{playerScore}";
+        UpdateDealerScore(dealerScore);
+        UpdatePlayerScore(playerScore);
 
-        _resultText.text = result switch
+        _newResultText.text = result switch
         {
             GameResult.Blackjack => "Blackjack! You Win!",
             GameResult.PlayerWins => "You Win!",
@@ -196,7 +188,7 @@ public class UIManager : MonoBehaviour
             _ => string.Empty
         };
 
-        _resultText.color = result switch
+        _newResultText.color = result switch
         {
             GameResult.PlayerWins => Color.green,
             GameResult.Blackjack => Color.green,
@@ -204,6 +196,8 @@ public class UIManager : MonoBehaviour
             GameResult.Push => Color.yellow,
             _ => Color.white
         };
+
+        SetOptionsToPlay(false);
     }
 
     /// <summary>
@@ -212,15 +206,21 @@ public class UIManager : MonoBehaviour
     /// </summary>
     public void SetActionsInteractable(bool interactable)
     {
-        _hitButton.interactable = interactable;
-        _standButton.interactable = interactable;
-
         _hitStandButtonsActive = interactable;
 
         Color objectColor = interactable ? Color.white : Color.gray;
 
-        _newHitButton.GetComponent<Renderer>().material.SetColor("_BaseColor", objectColor);
-        _newStandButton.GetComponent<Renderer>().material.SetColor("_BaseColor", objectColor);
+        _hitButton.GetComponent<Renderer>().material.SetColor("_BaseColor", objectColor);
+        _standButton.GetComponent<Renderer>().material.SetColor("_BaseColor", objectColor);
+    }
+
+    private void SetOptionsToPlay(bool isGameOptions)
+    {
+        _hitButton.SetActive(isGameOptions);
+        _standButton.SetActive(isGameOptions);
+
+        _newResultDisplay.SetActive(!isGameOptions);
+        _newNewRoundButton.SetActive(!isGameOptions);
     }
 
     /* private helper methods */
