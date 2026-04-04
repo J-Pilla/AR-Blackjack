@@ -35,6 +35,30 @@ public class UIManager : MonoBehaviour
 
     private bool _hitStandButtonsActive;
 
+    public TextMeshPro PlayerScoreText
+    {
+        get => _newPlayerScoreText;
+        set => _newPlayerScoreText = value;
+    }
+
+    public TextMeshPro DealerScoreText
+    {
+        get => _newDealerScoreText;
+        set => _newDealerScoreText = value;
+    }
+
+    public GameObject HitButton
+    {
+        get => _newHitButton;
+        set => _newHitButton = value;
+    }
+
+    public GameObject StandButton
+    {
+        get => _newStandButton;
+        set => _newStandButton = value;
+    }
+
     /* unity lifecycle */
     private void Start()
     {
@@ -51,43 +75,22 @@ public class UIManager : MonoBehaviour
     
     private void Update()
     {
-        if (_hitStandButtonsActive && Input.GetMouseButtonDown(0)) 
+        if (_hitStandButtonsActive && Input.GetMouseButtonDown(0))
+            HandleTapInput();
+    }
+
+    private void HandleTapInput()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit))
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-
-            if (Physics.Raycast(ray, out hit))
-            {
-                if (hit.transform.gameObject == _newHitButton)
-                {
-                    _gameManager.OnPlayerHit();
-                }
-                else if (hit.transform.gameObject == _newStandButton)
-                {
-                    _gameManager.OnPlayerStand();
-                }
-            }
+            if (hit.transform.gameObject == _newHitButton)
+                _gameManager.OnPlayerHit();
+            else if (hit.transform.gameObject == _newStandButton)
+                _gameManager.OnPlayerStand();
         }
-    }
-
-    public void setHitButton(GameObject hitButton)
-    {
-        _newHitButton = hitButton;
-    }
-
-    public void setStandButton(GameObject standButton)
-    {
-        _newStandButton = standButton;
-    }
-
-    public void setPlayerText(TextMeshPro playerText)
-    {
-        _newPlayerScoreText = playerText;
-    }
-
-    public void setDealerText(TextMeshPro dealerText)
-    {
-        _newDealerScoreText = dealerText;
     }
 
     /* Public API — called by GameManager */
