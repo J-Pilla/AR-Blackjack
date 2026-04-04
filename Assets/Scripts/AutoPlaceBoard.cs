@@ -68,7 +68,9 @@ public class AutoPlaceBoard : MonoBehaviour
         if (_isPlaced) return;
 
         UpdateIndicator();
-        HandleTapInput();
+
+        if (Input.GetMouseButtonDown(0))
+            HandleTapInput();
     }
 
 
@@ -114,18 +116,6 @@ public class AutoPlaceBoard : MonoBehaviour
     /// </summary>
     private void HandleTapInput()
     {
-        bool tapped = false;
-
-#if UNITY_EDITOR
-
-        //tapped = Input.GetMouseButtonDown(0);
-        tapped = Mouse.current.leftButton.wasPressedThisFrame; // New Input System way to detect mouse click
-#else
-        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
-            tapped = true;
-#endif
-
-        if (!tapped) return;
         if (_indicator == null || !_indicator.activeSelf) return;
 
         PlaceBoard(_indicator.transform.position, _indicator.transform.rotation);
