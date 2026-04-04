@@ -1,5 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+//using System.ComponentModel.DataAnnotations;
+//using System.Diagnostics;
+//using System.Numerics;
+//using System.Threading.Tasks.Dataflow;
 using TMPro;
 using UnityEngine;
 
@@ -26,7 +30,8 @@ public class GameManager : MonoBehaviour
     [Header("Timing")]
     [SerializeField] private float _dealDelay = 0.4f;      // pause between each dealt card
     [SerializeField] private float _dealerDelay = 0.8f;    // 
-
+    [SerializeField] private float _dealMoveDuration = 0.35f;
+    [SerializeField] private float _dealArcHeight = 0.15f;
 
     /* private fields */
 
@@ -40,6 +45,10 @@ public class GameManager : MonoBehaviour
     private GameObject _bettingBoard;
     private Transform _playerCardRoot; // cards are spawned as children of these roots, which are positioned in the table prefab
     private Transform _dealerCardRoot;
+
+    // deck references
+    private Transform _deckRoot;
+    private DeckVisualController _deckVisualController;
 
     // To track all spawned CardVisual objects so we can destroy them on reset
     private readonly List<CardVisual> _playerCardVisuals = new();
@@ -132,6 +141,14 @@ public class GameManager : MonoBehaviour
             {
                 _dealerCardRoot = t;
             }
+            else if (t.gameObject.name == "DeckRoot")
+            {
+                _deckRoot = t;
+            }
+            else if (t.gameObject.name == "DeckVisual")
+            {
+                _deckVisualController = t.GetComponent<DeckVisualController>();
+            }
             else if (t.gameObject.name == "HitButton")
             {
                 _uiManager.setHitButton(t.gameObject);
@@ -155,6 +172,15 @@ public class GameManager : MonoBehaviour
             Debug.LogError("GameManager: Could not find PlayerCards roots in the board prefab.");
             return;
         }
+
+        if (_deckRoot == null)
+        {
+            Debug.LogError("GameManager: Could not find DeckRoot in board prefab");
+            return;
+        }
+
+        if (_deckVisualController != null)
+            _deckVisualController.Refresh();
 
         ClearStaticCards(_playerCardRoot);
         ClearStaticCards(_dealerCardRoot);
@@ -189,7 +215,12 @@ public class GameManager : MonoBehaviour
 
         // Ensure the deck is shuffled before the first round
         if (!Deck.IsReady)
+        {
             Deck.Shuffle();
+            
+            if (_deckVisualController != null)
+                _deckVisualController.OnDeckReset();
+        }
 
         // Deal order: player, dealer (face down), player, dealer (face up)
         yield return StartCoroutine(DealCardToPlayer( true));
@@ -217,16 +248,30 @@ public class GameManager : MonoBehaviour
     {
         Card card = new();
         _humanPlayer.AddCard(card);
-        SpawnCardVisual(card, faceUp, _playerCardRoot, _playerCardVisuals);
-        yield return new WaitForSeconds(_dealDelay);
+        // SpawnCardVisual(card, faceUp, _playerCardRoot, _playerCardVisuals);
+        // yield return new WaitForSeconds(_dealDelay);
+
+        yield return StartCoroutine(SpawnAnimateCard(
+            card,
+            faceUp,
+            _playerCardRoot,
+            _playerCardVisuals
+        ));
     }
 
     private IEnumerator DealCardToDealer(bool faceUp)
     {
         Card card = new();
         _dealer.AddCard(card);
-        SpawnCardVisual(card, faceUp, _dealerCardRoot, _dealerCardVisuals);
-        yield return new WaitForSeconds(_dealDelay);
+        //SpawnCardVisual(card, faceUp, _dealerCardRoot, _dealerCardVisuals);
+        //yield return new WaitForSeconds(_dealDelay);
+
+        yield return StartCoroutine(SpawnAnimateCard(
+            card,
+            faceUp,
+            _dealerCardRoot,
+            _dealerCardVisuals
+        ));
     }
 
 
@@ -360,7 +405,12 @@ public class GameManager : MonoBehaviour
     {
         // Check whether the deck needs to be reshuffled (past the shuffle point)
         if (Deck.NeedsReshuffle)
+        {
             Deck.Shuffle();
+            
+            if (_deckVisualController != null)
+                _deckVisualController.OnDeckReset();
+        }
 
         // Destroy all spawned card GameObjects
         DestroyCardVisuals(_playerCardVisuals);
@@ -388,38 +438,107 @@ public class GameManager : MonoBehaviour
     /// Each new card is offset along the local X-axis so they fan out.
     /// A tiny Z and Y offset prevents Z-fighting when cards overlap.
     /// </summary>
-    private void SpawnCardVisual(Card card, bool faceUp, Transform root, List<CardVisual> visualList)
+    
+    private IEnumerator SpawnAnimateCard(Card card, bool faceUp, Transform targetRoot, List<CardVisual> visualList)
     {
+        if (_deckRoot == null)
+        {
+            Debug.LogError("GameManager: DeckRoot is missing");
+            yield break;
+        }
+
         int index = visualList.Count;
 
         // spawned as child of the root so they move with the table, and position them in a row with some spacing
-        Vector3 localPos = new(
+        Vector3 targetLocalPos = new Vector3(
             index * _cardSpacing,
             index * _cardStackOffset,
             index * _cardStackOffset);
 
         // Cards lie flat on the table (rotated 90 on X so the face points up)
-        Quaternion localRot = Quaternion.Euler(90f, 0f, 0f);
+        Quaternion targetLocalRot = Quaternion.Euler(90f, 0f, 0f);
 
-        GameObject cardGO = Instantiate(_cardPrefab, root);
-        cardGO.transform.SetLocalPositionAndRotation(localPos, localRot);
+        Vector3 targetWorldPos = targetRoot.TransformPoint(targetLocalPos);
+        Quaternion targetWorldRot = targetRoot.rotation * targetLocalRot;
+
+        GameObject cardGO = Instantiate(_cardPrefab, _deckRoot.position, _deckRoot.rotation);
         cardGO.name = $"Card_{card._suit}_{card._rank}";
 
         CardVisual visual = cardGO.GetComponent<CardVisual>();
+        
         if (visual == null)
         {
-            Debug.LogError("GameManager: Card prefab does not have a CardVisual component.");
-            return;
+            Debug.LogError("GameManager: Card prefab does not have a CardVisual component");
+            Destroy(cardGO);
+            yield break;
         }
-
+        
         visual.Initialize(card, false);
 
+        if (_deckVisualController != null) // shrink deck after drawn
+            _deckVisualController.OnCardDrawn();
+        
+        yield return StartCoroutine(AnimateCardToTarget(
+            cardGO.transform,
+            targetWorldPos,
+            targetWorldRot
+        ));
+
+        cardGO.transform.SetParent(targetRoot, true);
+        cardGO.transform.SetLocalPositionAndRotation(targetLocalPos, targetLocalRot);
+
         if (faceUp)
+            visual.FlipFaceUp();
+        
+        visualList.Add(visual);
+
+        // GameObject cardGO = Instantiate(_cardPrefab, root);
+        // cardGO.transform.SetLocalPositionAndRotation(localPos, localRot);
+        // cardGO.name = $"Card_{card._suit}_{card._rank}";
+
+        // CardVisual visual = cardGO.GetComponent<CardVisual>();
+        // if (visual == null)
+        // {
+        //     Debug.LogError("GameManager: Card prefab does not have a CardVisual component.");
+        //     return;
+        // }
+
+        // visual.Initialize(card, false);
+
+        // if (faceUp)
+        // {
+        //     visual.FlipFaceUp(); // Only face-up if specified, so we can deal the dealer's hole card face-down
+        // }
+
+        // visualList.Add(visual);
+    }
+
+    private IEnumerator AnimateCardToTarget(Transform cardTransform, Vector3 targetPos, Quaternion targetRot)
+    {
+        Vector3 startPos = cardTransform.position;
+        Quaternion startRot = cardTransform.rotation;
+
+        float elapsed = 0f;
+
+        while (elapsed < _dealMoveDuration)
         {
-            visual.FlipFaceUp(); // Only face-up if specified, so we can deal the dealer's hole card face-down
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / _dealMoveDuration);
+
+            float eased = Mathf.SmoothStep(0f, 1f, t);
+
+            Vector3 pos = Vector3.Lerp(startPos, targetPos, eased);
+
+            pos.y += Mathf.Sin(eased * Mathf.PI) * _dealArcHeight;
+
+            cardTransform.position = pos;
+            cardTransform.rotation = Quaternion.Slerp(startRot, targetRot, eased);
+
+            yield return null;
         }
 
-        visualList.Add(visual);
+        cardTransform.position = targetPos;
+        cardTransform.rotation = targetRot;
     }
 
     /// <summary>

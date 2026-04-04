@@ -41,6 +41,11 @@ public static class Deck
     /// </summary>
     public static bool NeedsReshuffle => _cardIndex >= _shufflePoint;
 
+    // handling visual deck shrinking as cards are drawn
+    public static int CardsDrawn => _cardIndex;
+    public static int CardsRemaining => Size - _cardIndex;
+    public static float RemainingRatio => Size == 0 ? 0f : (float)CardsRemaining / Size;
+
 
     /* public APIs */
 
