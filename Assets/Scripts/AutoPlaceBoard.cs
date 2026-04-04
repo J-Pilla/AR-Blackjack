@@ -1,7 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 
@@ -22,26 +20,24 @@ using UnityEngine.XR.ARSubsystems;
 /// </summary>
 public class AutoPlaceBoard : MonoBehaviour
 {
-
     /* inspector fields */
-    [Header("AR Components")]
-    public ARPlaneManager planeManager;
-    public ARRaycastManager raycastManager;
 
     [Header("Prefabs")]
-    public GameObject boardPrefab;
-    public GameObject placementIndicatorPrefab; // a simple ring/disc to show aim point
+    [SerializeField] private GameObject _blackjackTablePrefab;
+    [SerializeField] private GameObject _placementIndicatorPrefab; // a simple ring/disc to show aim point
 
     [Header("Placement")]
     [Tooltip("Height offset so the board sits on top of the detected surface.")]
-    public float heightOffset = 0.01f;
+    [SerializeField] private float heightOffset = 0.01f;
 
     /* private state */
+
+    private ARPlaneManager _planeManager;
+    private ARRaycastManager _raycastManager;
     private GameObject _indicator;
     private GameObject _spawnedBoard;
     private bool _isPlaced;
     private readonly List<ARRaycastHit> _hits = new();
-
 
     /* events */
 
@@ -55,12 +51,12 @@ public class AutoPlaceBoard : MonoBehaviour
     /* Unity lifecycle */
     private void Start()
     {
+        _planeManager = GetComponent<ARPlaneManager>();
+        _raycastManager = GetComponent<ARRaycastManager>();
+
         // Spawn the placement indicator but keep it hidden until a plane is found
-        if (placementIndicatorPrefab != null)
-        {
-            _indicator = Instantiate(placementIndicatorPrefab);
-            _indicator.SetActive(false);
-        }
+        _indicator = Instantiate(_placementIndicatorPrefab);
+        _indicator.SetActive(false);
     }
 
     private void Update()
@@ -68,7 +64,9 @@ public class AutoPlaceBoard : MonoBehaviour
         if (_isPlaced) return;
 
         UpdateIndicator();
-        HandleTapInput();
+
+        if (Input.GetMouseButtonDown(0))
+            HandleTapInput();
     }
 
 
@@ -82,7 +80,7 @@ public class AutoPlaceBoard : MonoBehaviour
     {
         Vector2 screenCentre = new(Screen.width / 2f, Screen.height / 2f);
 
-        if (raycastManager.Raycast(screenCentre, _hits, TrackableType.PlaneWithinPolygon))
+        if (_raycastManager.Raycast(screenCentre, _hits, TrackableType.PlaneWithinPolygon))
         {
             Pose hitPose = _hits[0].pose;
             Vector3 position = hitPose.position;
@@ -101,11 +99,8 @@ public class AutoPlaceBoard : MonoBehaviour
                     Quaternion.LookRotation(forward));
             }
         }
-        else
-        {
-            if (_indicator != null)
-                _indicator.SetActive(false);
-        }
+        else if (_indicator != null)
+            _indicator.SetActive(false);
     }
 
     /// <summary>
@@ -114,18 +109,6 @@ public class AutoPlaceBoard : MonoBehaviour
     /// </summary>
     private void HandleTapInput()
     {
-        bool tapped = false;
-
-#if UNITY_EDITOR
-
-        //tapped = Input.GetMouseButtonDown(0);
-        tapped = Mouse.current.leftButton.wasPressedThisFrame; // New Input System way to detect mouse click
-#else
-        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
-            tapped = true;
-#endif
-
-        if (!tapped) return;
         if (_indicator == null || !_indicator.activeSelf) return;
 
         PlaceBoard(_indicator.transform.position, _indicator.transform.rotation);
@@ -142,11 +125,11 @@ public class AutoPlaceBoard : MonoBehaviour
         if (_indicator != null)
             _indicator.SetActive(false);
 
-        _spawnedBoard = Instantiate(boardPrefab, position, rotation);
+        _spawnedBoard = Instantiate(_blackjackTablePrefab, position, rotation);
 
         // Stop detecting planes once the board is placed to save resources
-        planeManager.enabled = false;
-        foreach (ARPlane plane in planeManager.trackables)
+        _planeManager.enabled = false;
+        foreach (ARPlane plane in _planeManager.trackables)
             plane.gameObject.SetActive(false);
 
         OnBoardPlaced?.Invoke(_spawnedBoard);
@@ -164,6 +147,6 @@ public class AutoPlaceBoard : MonoBehaviour
             Destroy(_spawnedBoard);
 
         _isPlaced = false;
-        planeManager.enabled = true;
+        _planeManager.enabled = true;
     }
 }

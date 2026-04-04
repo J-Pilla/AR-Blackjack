@@ -148,8 +148,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28ab8ba39e8d2944b89a0110818bcfd9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MainMenu
-  mainMenuPanel: {fileID: 1346523472}
-  instructionsPanel: {fileID: 218384567}
+  _mainMenuPanel: {fileID: 1346523472}
+  _instructionsPanel: {fileID: 218384567}
 --- !u!4 &105274306
 Transform:
   m_ObjectHideFlags: 0
