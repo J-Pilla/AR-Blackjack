@@ -210,7 +210,7 @@ public class GameManager : MonoBehaviour
         _uiManager.ShowDealingState();
 
         // Ensure the deck is shuffled before the first round
-        if (!Deck.IsReady)
+        if (!Deck.IsShuffleTime)
         {
             Deck.Shuffle();
             
@@ -400,7 +400,7 @@ public class GameManager : MonoBehaviour
     public void StartNewRound()
     {
         // Check whether the deck needs to be reshuffled (past the shuffle point)
-        if (Deck.NeedsReshuffle)
+        if (Deck.IsShuffleTime)
         {
             Deck.Shuffle();
             

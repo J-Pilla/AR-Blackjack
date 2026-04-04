@@ -1,13 +1,5 @@
 ﻿using static UnityEngine.Random;
 
-
-/*
- * Changes from original:
-    - Added IsReady property so GameManager can check before the first deal.
-    - Added NeedsReshuffle property so GameManager can reshuffle between rounds
-      when the shoe passes the shuffle point.
- */
-
 /// <summary>
 /// static class representing a deck of cards,
 /// uses an array of integers to initialize unique Card objects
@@ -27,19 +19,7 @@ public static class Deck
     public const int Size = DeckSize * DeckCount;
 
     // properties
-    public static int ShufflePoint { get => _shufflePoint; }
-
-    /// <summary>
-    /// True once Shuffle() has been called at least once.
-    /// GameManager checks this before the first deal.
-    /// </summary>
-    public static bool IsReady => _isInitialized;
-
-    /// <summary>
-    /// True when the next card to be distributed is past the shuffle point.
-    /// GameManager checks this between rounds.
-    /// </summary>
-    public static bool NeedsReshuffle => _cardIndex >= _shufflePoint;
+    public static bool IsShuffleTime => _cardIndex < _shufflePoint;
 
     // handling visual deck shrinking as cards are drawn
     public static int CardsDrawn => _cardIndex;
@@ -47,7 +27,7 @@ public static class Deck
     public static float RemainingRatio => Size == 0 ? 0f : (float)CardsRemaining / Size;
 
 
-    /* public APIs */
+    /* public API */
 
     /// <summary>
     /// randomize the order of the card ids in the deck
