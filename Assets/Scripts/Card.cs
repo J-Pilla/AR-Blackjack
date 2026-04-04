@@ -1,13 +1,12 @@
 /// <summary>
 /// handle the data aspect of a card
 /// </summary>
-//[System.Serializable]
 public class Card
 {
     // fields
-    public int _id;
-    public Rank _rank;
-    public Suit _suit;
+    public readonly int _id; // make these private later
+    public readonly Rank _rank;
+    public readonly Suit _suit;
 
     // properties
     public int Value
@@ -29,7 +28,7 @@ public class Card
     /// <returns>
     /// String in the format "card-suit-rank".
     /// </returns>
-    public string ResourcePath { get => $"card-{_suit}-{(int)(_rank < Rank.Ace ? _rank : Rank.LowAce)}".ToLower(); } // e.g., "card-hearts-1" || "card-spades-13" 
+    public string ResourcePath { get => $"card-{_suit}-{(_rank < Rank.Ace ? (int)_rank : 1)}".ToLower(); } // e.g., "card-hearts-1" || "card-spades-13" 
 
     // constructors
     public Card()
@@ -37,23 +36,6 @@ public class Card
         _id = Deck.DistributeCardId();
         _rank = (Rank)(_id % 13 + 2);
         _suit = (Suit)(_id % 4);
-    }
-
-    [System.Obsolete("Use the default constructor outside of forcing cards for testing")]
-    public Card(Suit suit, Rank rank)
-    {
-        _suit = suit;
-        _rank = rank;
-    }
-
-    // methods
-    /// <summary>
-    /// changes Ace to LowAce, reducing the card's value to 1
-    /// </summary>
-    public void LowerAce()
-    {
-        if (_rank == Rank.Ace)
-            _rank = Rank.LowAce;
     }
 
     public override string ToString() => $"Card; _id: {_id}, _rank: {_rank}, _suit: {_suit}";
@@ -69,8 +51,7 @@ public enum Suit
 
 public enum Rank
 {
-    LowAce = 1,
-    Two,
+    Two = 2,
     Three,
     Four,
     Five,
