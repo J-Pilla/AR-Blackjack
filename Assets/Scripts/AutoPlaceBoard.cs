@@ -3,18 +3,6 @@ using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 
-
-/*
- *Modification to the previous version:
-    - Class name now matches filename (was ARBoardController inside AutoPlaceBoard.cs).
-    - Board is locked after placement, so no more re-alignment for the board every frame.
-    - Tap-to-place, which I think is more intuitive than the silent auto-place that was 
-      happening before. 
-      It also gives the user control over where to place the board instead of it just 
-      snapping to the first detected plane. 
-      The placement indicator provides visual feedback to help with aiming.
- */
-
 /// <summary>
 /// Handles AR plane detection and table placement.
 /// </summary>

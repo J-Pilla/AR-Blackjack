@@ -1,8 +1,5 @@
-using JetBrains.Annotations;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UIElements;
-using UnityEngine.XR.ARFoundation;
 
 public class BettingManager : MonoBehaviour
 {
@@ -35,48 +32,39 @@ public class BettingManager : MonoBehaviour
     [SerializeField] private TextMeshPro _betText;
     [SerializeField] private TextMeshPro _chipsText;
 
+    public int BetAmount => _betAmount;
+
     public event System.Action<int> OnBetPlaced; // int = bet amount
 
     // Update is called once per frame
     void Update()
     {
-        // Control betting actions and ability to place the bet when finished
         if (Input.GetMouseButtonDown(0))
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
+            HandleTapInput();
+    }
 
-            if (Physics.Raycast(ray, out hit))
-            {
-                if (hit.transform.gameObject == _positiveOneHundred)
-                {
-                    SpawnChip(_oneHundredPrefab, _oneHundredSpawner, 100);
-                }
-                else if (hit.transform.gameObject == _negativeOneHundred)
-                {
-                    DestroyChip(_oneHundredSpawner, 100);
-                }
-                else if (hit.transform.gameObject == _positiveTen)
-                {
-                    SpawnChip(_tenPrefab, _tenSpawner, 10);
-                }
-                else if (hit.transform.gameObject == _negativeTen)
-                {
-                    DestroyChip(_tenSpawner, 10);
-                }
-                else if (hit.transform.gameObject == _positiveOne)
-                {
-                    SpawnChip(_onePrefab, _oneSpawner, 1);
-                }
-                else if (hit.transform.gameObject == _negativeOne)
-                {
-                    DestroyChip(_oneSpawner, 1);
-                }
-                else if (hit.transform.gameObject == _placeBetButton)
-                {
-                    PlaceBet(_betAmount);
-                }
-            }
+    private void HandleTapInput()
+    {
+        // Control betting actions and ability to place the bet when finished
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit))
+        {
+            if (hit.transform.gameObject == _positiveOneHundred)
+                SpawnChip(_oneHundredPrefab, _oneHundredSpawner, 100);
+            else if (hit.transform.gameObject == _negativeOneHundred)
+                DestroyChip(_oneHundredSpawner, 100);
+            else if (hit.transform.gameObject == _positiveTen)
+                SpawnChip(_tenPrefab, _tenSpawner, 10);
+            else if (hit.transform.gameObject == _negativeTen)
+                DestroyChip(_tenSpawner, 10);
+            else if (hit.transform.gameObject == _positiveOne)
+                SpawnChip(_onePrefab, _oneSpawner, 1);
+            else if (hit.transform.gameObject == _negativeOne)
+                DestroyChip(_oneSpawner, 1);
+            else if (hit.transform.gameObject == _placeBetButton)
+                PlaceBet(_betAmount);
         }
     }
 
@@ -88,17 +76,14 @@ public class BettingManager : MonoBehaviour
     {
         // Clear out the chip spawners
         foreach (Transform child in _oneSpawner.transform)
-        {
             Destroy(child.gameObject);
-        }
+
         foreach (Transform child in _tenSpawner.transform)
-        {
             Destroy(child.gameObject);
-        }
+
         foreach (Transform child in _oneHundredSpawner.transform)
-        {
             Destroy(child.gameObject);
-        }
+
         _betAmount = 0;
     }
 
@@ -156,18 +141,7 @@ public class BettingManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Simple getter for the bet value
-    /// </summary>
-    public int GetBet()
-    {
-        return _betAmount;
-    }
-
-    /// <summary>
     /// Fire the event and let the game manager know it has been fired
     /// </summary>
-    public void PlaceBet(int amount)
-    {
-        OnBetPlaced?.Invoke(_betAmount);
-    }
+    public void PlaceBet(int amount) => OnBetPlaced?.Invoke(_betAmount);
 }

@@ -3,9 +3,9 @@ using TMPro;
 
 public class TitleFlash : MonoBehaviour
 {
-    public float speed = 2f;
-    public float minBrightness = 0.7f;
-    public float maxBrightness = 1.3f;
+    [SerializeField] private float _speed = 11f;
+    [SerializeField] private float _minBrightness = 0.7f;
+    [SerializeField] private float _maxBrightness = 1.3f;
 
     private TextMeshProUGUI text;
     private Color originalColor;
@@ -18,8 +18,8 @@ public class TitleFlash : MonoBehaviour
 
     void Update()
     {
-        float t = (Mathf.Sin(Time.time * speed) + 1f) / 2f;
-        float brightness = Mathf.Lerp(minBrightness, maxBrightness, t);
+        float t = (Mathf.Sin(Time.time * _speed) + 1f) / 2f;
+        float brightness = Mathf.Lerp(_minBrightness, _maxBrightness, t);
 
         text.color = originalColor * brightness;
     }

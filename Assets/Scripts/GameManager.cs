@@ -119,47 +119,40 @@ public class GameManager : MonoBehaviour
         Transform[] roots = board.GetComponentsInChildren<Transform>();
         foreach (Transform t in roots)
         {
-            if(t.gameObject.name == "BoardRoot")
+            switch (t.name)
             {
-                _playingBoard = t.gameObject;
-            }
-            else if (t.gameObject.name == "BettingRoot")
-            {
-                _bettingBoard = t.gameObject;
-                _bettingBoard.GetComponent<BettingManager>().SetUpBet(_totalChips);
-                _bettingBoard.GetComponent<BettingManager>().OnBetPlaced += HandleBetPlaced;
-            }
-            else if (t.gameObject.name == "PlayerCardSlots")
-            {
-                _playerCardRoot = t;
-            }
-            else if (t.gameObject.name == "DealerCardSlots")
-            {
-                _dealerCardRoot = t;
-            }
-            else if (t.gameObject.name == "DeckRoot")
-            {
-                _deckRoot = t;
-            }
-            else if (t.gameObject.name == "DeckVisual")
-            {
-                _deckVisualController = t.GetComponent<DeckVisualController>();
-            }
-            else if (t.gameObject.name == "HitButton")
-            {
-                _uiManager.setHitButton(t.gameObject);
-            }
-            else if (t.gameObject.name == "StandButton")
-            {
-                _uiManager.setStandButton(t.gameObject);
-            }
-            else if (t.gameObject.name == "DealerScoreTile")
-            {
-                _uiManager.setDealerText(t.gameObject.GetComponentInChildren<TextMeshPro>());
-            }
-            else if (t.gameObject.name == "PlayerScoreTile")
-            {
-                _uiManager.setPlayerText(t.gameObject.GetComponentInChildren<TextMeshPro>());
+                case "BoardRoot":
+                    _playingBoard = t.gameObject;
+                    break;
+                case "BettingRoot":
+                    _bettingBoard = t.gameObject;
+                    _bettingBoard.GetComponent<BettingManager>().SetUpBet(_totalChips);
+                    _bettingBoard.GetComponent<BettingManager>().OnBetPlaced += HandleBetPlaced;
+                    break;
+                case "PlayerCardSlots":
+                    _playerCardRoot = t;
+                    break;
+                case "DealerCardSlots":
+                    _dealerCardRoot = t;
+                    break;
+                case "DeckRoot":
+                    _deckRoot = t;
+                    break;
+                case "DeckVisual":
+                    _deckVisualController = t.GetComponent<DeckVisualController>();
+                    break;
+                case "HitButton":
+                    _uiManager.HitButton = t.gameObject;
+                    break;
+                case "StandButton":
+                    _uiManager.StandButton = t.gameObject;
+                    break;
+                case "DealerScoreTile":
+                    _uiManager.DealerScoreText = t.gameObject.GetComponentInChildren<TextMeshPro>();
+                    break;
+                case "PlayerScoreTile":
+                    _uiManager.PlayerScoreText = t.gameObject.GetComponentInChildren<TextMeshPro>();
+                    break;
             }
         }
 
@@ -382,9 +375,9 @@ public class GameManager : MonoBehaviour
             result = GameResult.Push;
 
         if(result == GameResult.PlayerWins || result == GameResult.Blackjack)
-            _totalChips += _bettingBoard.GetComponent<BettingManager>().GetBet();
+            _totalChips += _bettingBoard.GetComponent<BettingManager>().BetAmount;
         else if (result == GameResult.DealerWins)
-            _totalChips -= _bettingBoard.GetComponent<BettingManager>().GetBet();
+            _totalChips -= _bettingBoard.GetComponent<BettingManager>().BetAmount;
 
         _uiManager.ShowResult(result, playerValue, dealerValue);
     }
