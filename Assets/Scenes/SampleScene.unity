@@ -582,10 +582,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa8f01a89716e6f49ba0721f00863df3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AutoPlaceBoard
-  planeManager: {fileID: 151853166}
-  raycastManager: {fileID: 721522281}
-  boardPrefab: {fileID: 8313750227990322802, guid: c198fd6a4ede0524b9991e479ec81cbc, type: 3}
-  placementIndicatorPrefab: {fileID: 8382320297509972834, guid: 4649cb5fe7707f1458f9ee1b6bb60c7e, type: 3}
+  _blackjackTablePrefab: {fileID: 1819375373}
+  _placementIndicatorPrefab: {fileID: 8382320297509972834, guid: 4649cb5fe7707f1458f9ee1b6bb60c7e, type: 3}
   heightOffset: 0.01
 --- !u!1 &728755627
 GameObject:
@@ -2039,6 +2037,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: c198fd6a4ede0524b9991e479ec81cbc, type: 3}
+--- !u!1 &1819375373 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8313750227990322802, guid: c198fd6a4ede0524b9991e479ec81cbc, type: 3}
+  m_PrefabInstance: {fileID: 1819375372}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1879183040
 GameObject:
   m_ObjectHideFlags: 0
@@ -2349,6 +2352,8 @@ MonoBehaviour:
   _cardStackOffset: 0.002
   _dealDelay: 0.4
   _dealerDelay: 0.8
+  _dealMoveDuration: 0.35
+  _dealArcHeight: 0.15
 --- !u!4 &2097232347
 Transform:
   m_ObjectHideFlags: 0

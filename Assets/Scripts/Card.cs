@@ -4,20 +4,20 @@
 public class Card
 {
     // fields
-    public readonly int _id; // make these private later
-    public readonly Rank _rank;
-    public readonly Suit _suit;
+    public readonly int Id;
+    public readonly Rank Rank;
+    public readonly Suit Suit;
 
     // properties
     public int Value
     {
         get
         {
-            if (_rank == Rank.Ace) return 11; // Ace is worth 11
+            if (Rank == Rank.Ace) return 11; // Ace is worth 11
 
-            if (_rank > Rank.Ten) return 10; // Jack, Queen, and King are worth 10
+            if (Rank > Rank.Ten) return 10; // Jack, Queen, and King are worth 10
 
-            return (int)_rank;
+            return (int)Rank;
         }
     }
 
@@ -28,17 +28,22 @@ public class Card
     /// <returns>
     /// String in the format "card-suit-rank".
     /// </returns>
-    public string ResourcePath { get => $"card-{_suit}-{(_rank < Rank.Ace ? (int)_rank : 1)}".ToLower(); } // e.g., "card-hearts-1" || "card-spades-13" 
+    public string ResourcePath => $"card-{Suit}-{(int)Rank}".ToLower(); // e.g., "card-hearts-1" || "card-spades-13"
+
+    /// <summary>
+    /// name used for game objects spawned with the card
+    /// </summary>
+    public string Name => $"Card_{Suit}_{Rank}";
 
     // constructors
     public Card()
     {
-        _id = Deck.DistributeCardId();
-        _rank = (Rank)(_id % 13 + 2);
-        _suit = (Suit)(_id % 4);
+        Id = Deck.DistributeCardId();
+        Rank = (Rank)(Id % 13 + 1);
+        Suit = (Suit)(Id % 4);
     }
 
-    public override string ToString() => $"Card; _id: {_id}, _rank: {_rank}, _suit: {_suit}";
+    public override string ToString() => $"Card; _id: {Id}, _rank: {Rank}, _suit: {Suit}";
 }
 
 public enum Suit
@@ -51,7 +56,8 @@ public enum Suit
 
 public enum Rank
 {
-    Two = 2,
+    Ace = 1,
+    Two,
     Three,
     Four,
     Five,
@@ -62,6 +68,5 @@ public enum Rank
     Ten,
     Jack,
     Queen,
-    King,
-    Ace
+    King
 }

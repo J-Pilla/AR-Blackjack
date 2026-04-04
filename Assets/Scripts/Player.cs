@@ -9,19 +9,16 @@ public class Player
     // fields
     private readonly List<Hand> _hands = new();
 
-    // Constructor
-    // The original script never added a hand to the list
-    public Player() =>_hands.Add(new());
 
-    /// <summary>
-    /// convenience accessor.
-    /// </summary>
-    public Hand PrimaryHand => _hands[0];
+    // constructor
+    public Player() => _hands.Add(new());
 
     // methods
     public int GetValue(int handIndex = 0) => _hands[handIndex].Value;
 
     public void AddCard(Card card, int handIndex = 0) => _hands[handIndex].AddCard(card);
+
+    public int GetCardValue(int cardIndex, int handIndex = 0) => _hands[handIndex].GetCardValue(cardIndex);
 
     public bool IsBust(int handIndex = 0) => _hands[handIndex].IsBust;
 
