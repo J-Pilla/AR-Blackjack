@@ -23,7 +23,7 @@ public class Hand
             {
                 value += card.Value;
 
-                if (card._rank == Rank.Ace)
+                if (card.Rank == Rank.Ace)
                     aceCount++;
             }
 
@@ -37,9 +37,6 @@ public class Hand
         }
     }
 
-    /// <summary>
-    /// IsBust
-    /// </summary>
     public bool IsBust => Value > 21;
 
     /// <summary>
@@ -47,13 +44,8 @@ public class Hand
     /// </summary>
     public bool IsBlackjack => Value == 21 && _cards.Count == 2;
 
-    /// <summary>
-    /// Readonly list of cards in this hand.
-    /// </summary>
-    public IReadOnlyList<Card> Cards => _cards;
-
     // methods
     public void AddCard(Card card) => _cards.Add(card);
 
-    public void Clear() => _cards.Clear();
+    public int GetCardValue(int cardIndex) => _cards[cardIndex].Value;
 }

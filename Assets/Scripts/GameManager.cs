@@ -1,9 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-//using System.ComponentModel.DataAnnotations;
-//using System.Diagnostics;
-//using System.Numerics;
-//using System.Threading.Tasks.Dataflow;
 using TMPro;
 using UnityEngine;
 
@@ -241,7 +237,7 @@ public class GameManager : MonoBehaviour
         }
 
         _phase = GamePhase.PlayerTurn;
-        _uiManager.ShowPlayerTurn(_humanPlayer.GetValue(), _dealer.PrimaryHand.Cards[1].Value);
+        _uiManager.ShowPlayerTurn(_humanPlayer.GetValue(), _dealer.GetCardValue(1));
     }
 
     private IEnumerator DealCardToPlayer(bool faceUp)
@@ -450,7 +446,7 @@ public class GameManager : MonoBehaviour
         int index = visualList.Count;
 
         // spawned as child of the root so they move with the table, and position them in a row with some spacing
-        Vector3 targetLocalPos = new Vector3(
+        Vector3 targetLocalPos = new(
             index * _cardSpacing,
             index * _cardStackOffset,
             index * _cardStackOffset);
@@ -462,7 +458,7 @@ public class GameManager : MonoBehaviour
         Quaternion targetWorldRot = targetRoot.rotation * targetLocalRot;
 
         GameObject cardGO = Instantiate(_cardPrefab, _deckRoot.position, _deckRoot.rotation);
-        cardGO.name = $"Card_{card._suit}_{card._rank}";
+        cardGO.name = card.Name;
 
         CardVisual visual = cardGO.GetComponent<CardVisual>();
         
