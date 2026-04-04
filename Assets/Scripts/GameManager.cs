@@ -153,6 +153,13 @@ public class GameManager : MonoBehaviour
                 case "PlayerScoreTile":
                     _uiManager.PlayerScoreText = t.gameObject.GetComponentInChildren<TextMeshPro>();
                     break;
+                case "ResultsDisplay":
+                    _uiManager.ResultDisplay = t.gameObject;
+                    _uiManager.ResultText = t.gameObject.GetComponentInChildren<TextMeshPro>();
+                    break;
+                case "NewRoundButton":
+                    _uiManager.NewRoundButton = t.gameObject;
+                    break;
             }
         }
 
@@ -526,8 +533,9 @@ public class GameManager : MonoBehaviour
             yield return null;
         }
 
-        cardTransform.position = targetPos;
-        cardTransform.rotation = targetRot;
+        cardTransform.SetPositionAndRotation(targetPos, targetRot);
+        //cardTransform.position = targetPos;
+        //cardTransform.rotation = targetRot;
     }
 
     /// <summary>
