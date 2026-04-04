@@ -11,10 +11,7 @@ public class Player
 
     // Constructor
     // The original script never added a hand to the list
-    public Player()
-    {
-        _hands.Add(new Hand());
-    }
+    public Player() =>_hands.Add(new());
 
     /// <summary>
     /// convenience accessor.
@@ -23,6 +20,7 @@ public class Player
 
     // methods
     public int GetValue(int handIndex = 0) => _hands[handIndex].Value;
+
     public void AddCard(Card card, int handIndex = 0) => _hands[handIndex].AddCard(card);
 
     public bool IsBust(int handIndex = 0) => _hands[handIndex].IsBust;
@@ -35,6 +33,6 @@ public class Player
     public void Reset()
     {
         _hands.Clear();
-        _hands.Add(new Hand());
+        _hands.Add(new());
     }
 }
