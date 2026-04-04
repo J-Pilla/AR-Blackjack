@@ -3,28 +3,22 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-    public GameObject mainMenuPanel;
-    public GameObject instructionsPanel;
+    [SerializeField] private GameObject _mainMenuPanel;
+    [SerializeField] private GameObject _instructionsPanel;
 
-    public void PlayGame()
-    {
-        SceneManager.LoadScene("SampleScene");
-    }
-
+    public void PlayGame() => SceneManager.LoadScene("SampleScene");
+    
     public void ShowInstructions()
     {
-        mainMenuPanel.SetActive(false);
-        instructionsPanel.SetActive(true);
+        _mainMenuPanel.SetActive(false);
+        _instructionsPanel.SetActive(true);
     }
 
     public void HideInstructions()
     {
-        instructionsPanel.SetActive(false);
-        mainMenuPanel.SetActive(true);
+        _instructionsPanel.SetActive(false);
+        _mainMenuPanel.SetActive(true);
     }
 
-    public void QuitGame()
-    {
-        Application.Quit();
-    }
+    public void QuitGame() => Application.Quit();
 }
