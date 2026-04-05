@@ -17,6 +17,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private UIManager _uiManager;
     [SerializeField] private GameObject _cardPrefab;
 
+    [Header("Placement")]
+    [SerializeField] private GameObject _placementHintPanel;
+
     [Header("Table Layout")]
     [Tooltip("How far apart cards are spaced on the X-axis.")]
     [SerializeField] private float _cardSpacing = 0.5f;
@@ -30,6 +33,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float _dealArcHeight = 0.15f;
 
     /* private fields */
+    private const int BASE_CHIPS = 1000;
 
     // The two logical participants
     private Player _humanPlayer;
@@ -39,6 +43,7 @@ public class GameManager : MonoBehaviour
     private GameObject _board;
     private GameObject _playingBoard;
     private GameObject _bettingBoard;
+    private GameObject _gameOverBoard;
     private Transform _playerCardRoot; // cards are spawned as children of these roots, which are positioned in the table prefab
     private Transform _dealerCardRoot;
 
@@ -51,21 +56,22 @@ public class GameManager : MonoBehaviour
     private readonly List<CardVisual> _dealerCardVisuals = new();
 
     // Total player chips
-    private int _totalChips = 1000;
+    private int _totalChips = BASE_CHIPS;
 
 
     /* Game state management */
-    private enum GamePhase
+    public enum GamePhase
     {
         WaitingForPlacement,
         Betting,
         Dealing,
         PlayerTurn,
         DealerTurn,
-        Evaluation
+        Evaluation,
+        GameOver
     }
 
-    private GamePhase _phase = GamePhase.WaitingForPlacement;
+    public GamePhase _phase = GamePhase.WaitingForPlacement;
 
 
     /* unity lifecycle */
@@ -74,7 +80,6 @@ public class GameManager : MonoBehaviour
     {
         // Validate inspector references
         if (_arService == null) Debug.LogError("GameManager: ARService is not assigned.", this);
-        if (_uiManager == null) Debug.LogError("GameManager: UIManager is not assigned.", this);
         if (_cardPrefab == null) Debug.LogError("GameManager: CardPrefab is not assigned.", this);
     }
 
@@ -86,9 +91,9 @@ public class GameManager : MonoBehaviour
 
         // Listen for the AR board being placed
         _arService.OnBoardPlaced += OnBoardPlaced;
-        
+
         // Show the "aim at a surface" instruction
-        _uiManager.ShowPlacementHint();
+        _placementHintPanel.SetActive(true);
     }
 
     private void OnDestroy()
@@ -100,6 +105,8 @@ public class GameManager : MonoBehaviour
             _bettingBoard.GetComponent<BettingManager>().OnBetPlaced -= HandleBetPlaced;
     }
 
+    // at initial state, only the placement hint is visible
+
 
     /* AR callbacks */
 
@@ -109,7 +116,10 @@ public class GameManager : MonoBehaviour
     /// </summary>
     private void OnBoardPlaced(GameObject board) // 
     {
+        _placementHintPanel.SetActive(false);
+
         _board = board;
+        _uiManager = board.GetComponent<UIManager>();
 
         // The BlackjackTable prefab originaly has two children named "PlayerCards"
         // one at z = -0.5 (dealer) and one at z = +0.5 (player).
@@ -126,7 +136,7 @@ public class GameManager : MonoBehaviour
                     break;
                 case "BettingRoot":
                     _bettingBoard = t.gameObject;
-                    _bettingBoard.GetComponent<BettingManager>().SetUpBet(_totalChips);
+                    StartCoroutine(_bettingBoard.GetComponent<BettingManager>().SetUpBet(_totalChips));
                     _bettingBoard.GetComponent<BettingManager>().OnBetPlaced += HandleBetPlaced;
                     break;
                 case "PlayerCardSlots":
@@ -141,27 +151,13 @@ public class GameManager : MonoBehaviour
                 case "DeckVisual":
                     _deckVisualController = t.GetComponent<DeckVisualController>();
                     break;
-                case "HitButton":
-                    _uiManager.HitButton = t.gameObject;
-                    break;
-                case "StandButton":
-                    _uiManager.StandButton = t.gameObject;
-                    break;
-                case "DealerScoreTile":
-                    _uiManager.DealerScoreText = t.gameObject.GetComponentInChildren<TextMeshPro>();
-                    break;
-                case "PlayerScoreTile":
-                    _uiManager.PlayerScoreText = t.gameObject.GetComponentInChildren<TextMeshPro>();
-                    break;
-                case "ResultsDisplay":
-                    _uiManager.ResultDisplay = t.gameObject;
-                    _uiManager.ResultText = t.gameObject.GetComponentInChildren<TextMeshPro>();
-                    break;
-                case "NewRoundButton":
-                    _uiManager.NewRoundButton = t.gameObject;
+                case "GameOverRoot":
+                    _gameOverBoard = t.gameObject;
                     break;
             }
         }
+
+        if (_uiManager == null) Debug.LogError("GameManager: UIManager is not assigned.", this);
 
         if (_playerCardRoot == null || _dealerCardRoot == null)
         {
@@ -182,7 +178,7 @@ public class GameManager : MonoBehaviour
         ClearStaticCards(_dealerCardRoot);
 
         _playingBoard.SetActive(false);
-        _uiManager.ShowBettingState();
+        _gameOverBoard.SetActive(false);
 
         _phase = GamePhase.Betting;
     }
@@ -196,10 +192,14 @@ public class GameManager : MonoBehaviour
         StartCoroutine(DealInitialCards());
     }
 
-
+    public void NewGame()
+    {
+        _totalChips = BASE_CHIPS;
+        _gameOverBoard.SetActive(false);
+        StartNewRound();
+    }
 
     /* Dealing and player actions */
-
     /// <summary>
     /// Deals the standard 2-card opening: player, dealer, player, dealer.
     /// The dealer's first card is dealt face-down.
@@ -399,30 +399,39 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void StartNewRound()
     {
-        // Check whether the deck needs to be reshuffled (past the shuffle point)
-        if (Deck.IsShuffleTime)
+        if(_totalChips == 0)
         {
-            Deck.Shuffle();
-            
-            if (_deckVisualController != null)
-                _deckVisualController.OnDeckReset();
+            _playingBoard.SetActive(false);
+            _gameOverBoard.SetActive(true);
+
+            _phase = GamePhase.GameOver;
         }
+        else
+        {
+            // Check whether the deck needs to be reshuffled (past the shuffle point)
+            if (Deck.IsShuffleTime)
+            {
+                Deck.Shuffle();
 
-        // Destroy all spawned card GameObjects
-        DestroyCardVisuals(_playerCardVisuals);
-        DestroyCardVisuals(_dealerCardVisuals);
+                if (_deckVisualController != null)
+                    _deckVisualController.OnDeckReset();
+            }
 
-        // Reset logical state
-        _humanPlayer.Reset();
-        _dealer.Reset();
+            // Destroy all spawned card GameObjects
+            DestroyCardVisuals(_playerCardVisuals);
+            DestroyCardVisuals(_dealerCardVisuals);
 
-        _bettingBoard.SetActive(true);
-        _playingBoard.SetActive(false);
+            // Reset logical state
+            _humanPlayer.Reset();
+            _dealer.Reset();
 
-        _bettingBoard.GetComponent<BettingManager>().SetUpBet(_totalChips);
-        _uiManager.ShowBettingState();
+            _bettingBoard.SetActive(true);
+            _playingBoard.SetActive(false);
 
-        _phase = GamePhase.Betting;
+            StartCoroutine(_bettingBoard.GetComponent<BettingManager>().SetUpBet(_totalChips));
+
+            _phase = GamePhase.Betting;
+        }
     }
 
 
@@ -548,6 +557,7 @@ public class GameManager : MonoBehaviour
             if (cv != null)
                 Destroy(cv.gameObject);
         }
+        list.Clear();
         list.Clear();
     }
 

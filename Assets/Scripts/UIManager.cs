@@ -1,80 +1,38 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Controls all Canvas UI elements.
 /// </summary>
 public class UIManager : MonoBehaviour
 {
-    /* inspector fields */
-    [Header("Placement")]
-    [SerializeField] private GameObject _placementHintPanel;
-    [SerializeField] private TextMeshProUGUI _placementHintText;
+    private GameManager _gameManager;
 
-    [Header("GameManager Reference")]
-    [SerializeField] private GameManager _gameManager;
+    [Header("Hit And Stand Buttons")]
+    [SerializeField] private GameObject _hitButton;
+    [SerializeField] private GameObject _standButton;
 
-    private TextMeshPro _newResultText;
-    private GameObject _newNewRoundButton;
-    private GameObject _newResultDisplay;
+    [Header("Score Texts")]
+    [SerializeField] private TextMeshPro _playerScoreText;
+    [SerializeField] private TextMeshPro _dealerScoreText;
 
-    private TextMeshPro _playerScoreText;
-    private TextMeshPro _dealerScoreText;
+    [Header("Results")]
+    [SerializeField] private TextMeshPro _newResultText;
+    [SerializeField] private GameObject _newNewRoundButton;
+    [SerializeField] private GameObject _newResultDisplay;
 
-    private GameObject _hitButton;
-    private GameObject _standButton;
+    [Header("Game Over")]
+    [SerializeField] private GameObject _newGameButton;
+    [SerializeField] private GameObject _gameOverMainMenuButton;
 
     private bool _hitStandButtonsActive;
-
-    public TextMeshPro PlayerScoreText
-    {
-        get => _playerScoreText;
-        set => _playerScoreText = value;
-    }
-
-    public TextMeshPro DealerScoreText
-    {
-        get => _dealerScoreText;
-        set => _dealerScoreText = value;
-    }
-
-    public GameObject HitButton
-    {
-        get => _hitButton;
-        set => _hitButton = value;
-    }
-
-    public GameObject StandButton
-    {
-        get => _standButton;
-        set => _standButton = value;
-    }
-
-    public GameObject ResultDisplay
-    {
-        get => _newResultDisplay;
-        set => _newResultDisplay = value;
-    }
-
-    public TextMeshPro ResultText
-    {
-        get => _newResultText;
-        set => _newResultText = value;
-    }
-
-    public GameObject NewRoundButton
-    {
-        get => _newNewRoundButton;
-        set => _newNewRoundButton = value;
-    }
-
 
     /* unity lifecycle */
     private void Start()
     {
-        // at initial state, only the placement hint is visible
-        SetPanelActive(_placementHintPanel, true);
+        _gameManager = FindAnyObjectByType<GameManager>();
 
     }
     
@@ -91,42 +49,34 @@ public class UIManager : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit))
         {
-            if(_hitStandButtonsActive)
+            if(_gameManager._phase != GameManager.GamePhase.GameOver)
             {
-                if (hit.transform.gameObject == _hitButton)
-                    _gameManager.OnPlayerHit();
-                else if (hit.transform.gameObject == _standButton)
-                    _gameManager.OnPlayerStand();
+                if(_hitStandButtonsActive)
+                {
+                    if (hit.transform.gameObject == _hitButton)
+                        _gameManager.OnPlayerHit();
+                    else if (hit.transform.gameObject == _standButton)
+                        _gameManager.OnPlayerStand();
+                }
+                if (hit.transform.gameObject == _newNewRoundButton)
+                    _gameManager.StartNewRound();
             }
-            if (hit.transform.gameObject == _newNewRoundButton)
-                _gameManager.StartNewRound();
+            else
+            {
+                if (hit.transform.gameObject == _newGameButton)
+                    _gameManager.NewGame();
+                else if (hit.transform.gameObject == _gameOverMainMenuButton)
+                    SceneManager.LoadScene(0);
+            }   
         }
     }
 
     /* Public API — called by GameManager */
-
-    /// <summary>
-    /// Shows the AR placement instruction screen.
-    /// </summary>
-    public void ShowPlacementHint()
-    {
-        if (_placementHintText != null)
-            _placementHintText.text = "Point your camera at a flat surface\nand tap to place the table";
-
-        SetPanelActive(_placementHintPanel, true);
-    }
-
-    public void ShowBettingState()
-    {
-        SetPanelActive(_placementHintPanel, false);
-    }
-
     /// <summary>
     /// Called while initial cards are being dealt. Hides action buttons.
     /// </summary>
     public void ShowDealingState()
     {
-        SetPanelActive(_placementHintPanel, false);
         SetOptionsToPlay(true);
 
         _dealerScoreText.text = "?";
@@ -214,6 +164,7 @@ public class UIManager : MonoBehaviour
         _standButton.GetComponent<Renderer>().material.SetColor("_BaseColor", objectColor);
     }
 
+    /* private helper methods */
     private void SetOptionsToPlay(bool isGameOptions)
     {
         _hitButton.SetActive(isGameOptions);
@@ -221,13 +172,5 @@ public class UIManager : MonoBehaviour
 
         _newResultDisplay.SetActive(!isGameOptions);
         _newNewRoundButton.SetActive(!isGameOptions);
-    }
-
-    /* private helper methods */
-
-    private void SetPanelActive(GameObject panel, bool active)
-    {
-        if (panel != null)
-            panel.SetActive(active);
     }
 }
