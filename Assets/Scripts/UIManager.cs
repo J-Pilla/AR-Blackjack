@@ -19,9 +19,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshPro _dealerScoreText;
 
     [Header("Results")]
-    [SerializeField] private TextMeshPro _newResultText;
-    [SerializeField] private GameObject _newNewRoundButton;
-    [SerializeField] private GameObject _newResultDisplay;
+    [SerializeField] private TextMeshPro _resultText;
+    [SerializeField] private GameObject _newRoundButton;
+    [SerializeField] private GameObject _resultDisplay;
 
     [Header("Game Over")]
     [SerializeField] private GameObject _newGameButton;
@@ -58,7 +58,7 @@ public class UIManager : MonoBehaviour
                     else if (hit.transform.gameObject == _standButton)
                         _gameManager.OnPlayerStand();
                 }
-                if (hit.transform.gameObject == _newNewRoundButton)
+                if (hit.transform.gameObject == _newRoundButton)
                     _gameManager.StartNewRound();
             }
             else
@@ -129,7 +129,7 @@ public class UIManager : MonoBehaviour
         UpdateDealerScore(dealerScore);
         UpdatePlayerScore(playerScore);
 
-        _newResultText.text = result switch
+        _resultText.text = result switch
         {
             GameResult.Blackjack => "Blackjack! You Win!",
             GameResult.PlayerWins => "You Win!",
@@ -138,7 +138,7 @@ public class UIManager : MonoBehaviour
             _ => string.Empty
         };
 
-        _newResultText.color = result switch
+        _resultText.color = result switch
         {
             GameResult.PlayerWins => Color.green,
             GameResult.Blackjack => Color.green,
@@ -170,7 +170,7 @@ public class UIManager : MonoBehaviour
         _hitButton.SetActive(isGameOptions);
         _standButton.SetActive(isGameOptions);
 
-        _newResultDisplay.SetActive(!isGameOptions);
-        _newNewRoundButton.SetActive(!isGameOptions);
+        _resultDisplay.SetActive(!isGameOptions);
+        _newRoundButton.SetActive(!isGameOptions);
     }
 }
