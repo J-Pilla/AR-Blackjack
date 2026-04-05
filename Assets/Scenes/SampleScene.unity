@@ -621,7 +621,6 @@ GameObject:
   - component: {fileID: 1433727220}
   - component: {fileID: 1433727219}
   - component: {fileID: 1433727218}
-  - component: {fileID: 1433727222}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -712,124 +711,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &1433727222
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1433727217}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8fa5b462cd36c754c9d1f5bccf60c290, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UIManager
-  _placementHintPanel: {fileID: 890505391}
-  _placementHintText: {fileID: 1922717565}
-  _gameManager: {fileID: 2097232346}
---- !u!1001 &1819375372
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 574699330795692616, guid: c198fd6a4ede0524b9991e479ec81cbc, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -2.8314953
-      objectReference: {fileID: 0}
-    - target: {fileID: 574699330795692616, guid: c198fd6a4ede0524b9991e479ec81cbc, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.00000007302967
-      objectReference: {fileID: 0}
-    - target: {fileID: 574699330795692616, guid: c198fd6a4ede0524b9991e479ec81cbc, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.99585015
-      objectReference: {fileID: 0}
-    - target: {fileID: 574699330795692616, guid: c198fd6a4ede0524b9991e479ec81cbc, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 574699330795692616, guid: c198fd6a4ede0524b9991e479ec81cbc, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 574699330795692616, guid: c198fd6a4ede0524b9991e479ec81cbc, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 574699330795692616, guid: c198fd6a4ede0524b9991e479ec81cbc, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 574699330795692616, guid: c198fd6a4ede0524b9991e479ec81cbc, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 574699330795692616, guid: c198fd6a4ede0524b9991e479ec81cbc, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 574699330795692616, guid: c198fd6a4ede0524b9991e479ec81cbc, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8313750227990322802, guid: c198fd6a4ede0524b9991e479ec81cbc, type: 3}
-      propertyPath: m_Name
-      value: BlackjackTable
-      objectReference: {fileID: 0}
-    - target: {fileID: 9204027608871297841, guid: c198fd6a4ede0524b9991e479ec81cbc, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 1563004766495827640, guid: c198fd6a4ede0524b9991e479ec81cbc, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 1036560088578791875, guid: c198fd6a4ede0524b9991e479ec81cbc, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 5742375200915508231, guid: c198fd6a4ede0524b9991e479ec81cbc, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 2746289562294832984, guid: c198fd6a4ede0524b9991e479ec81cbc, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 7785379364271866816, guid: c198fd6a4ede0524b9991e479ec81cbc, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 2685914300970554354, guid: c198fd6a4ede0524b9991e479ec81cbc, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 4043939384001563951, guid: c198fd6a4ede0524b9991e479ec81cbc, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 7822059650244402342, guid: c198fd6a4ede0524b9991e479ec81cbc, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 2890529346166302903, guid: c198fd6a4ede0524b9991e479ec81cbc, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 8030406103928111503, guid: c198fd6a4ede0524b9991e479ec81cbc, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 5652424921926874835, guid: c198fd6a4ede0524b9991e479ec81cbc, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 4684362074048016279, guid: c198fd6a4ede0524b9991e479ec81cbc, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 318946301074051107, guid: c198fd6a4ede0524b9991e479ec81cbc, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 7488909933428049759, guid: c198fd6a4ede0524b9991e479ec81cbc, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-  m_SourcePrefab: {fileID: 100100000, guid: c198fd6a4ede0524b9991e479ec81cbc, type: 3}
 --- !u!1 &1922717563
 GameObject:
   m_ObjectHideFlags: 0
@@ -887,7 +768,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Placement Hint
+  m_text: 'Point your camera at a flat surface
+
+    and tap to place the table'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -997,14 +880,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   _arService: {fileID: 721522280}
-  _uiManager: {fileID: 1433727222}
+  _uiManager: {fileID: 0}
   _cardPrefab: {fileID: 6520053771465494978, guid: 6967d8224537c3a4388ee70113ca0be9, type: 3}
+  _placementHintPanel: {fileID: 890505391}
   _cardSpacing: 0.08
   _cardStackOffset: 0.002
   _dealDelay: 0.4
   _dealerDelay: 0.8
   _dealMoveDuration: 0.35
   _dealArcHeight: 0.15
+  _phase: 0
 --- !u!4 &2097232347
 Transform:
   m_ObjectHideFlags: 0
@@ -1030,4 +915,3 @@ SceneRoots:
   - {fileID: 2097232347}
   - {fileID: 1433727221}
   - {fileID: 946189397}
-  - {fileID: 1819375372}

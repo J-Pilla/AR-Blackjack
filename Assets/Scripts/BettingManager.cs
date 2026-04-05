@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -5,7 +6,7 @@ public class BettingManager : MonoBehaviour
 {
     private int _betAmount = 0;
     private int _totalChips = 0;
-    private float _chipHeight = .0125f;
+    private float _chipHeight = .003125f;
 
     [Header("Betting Buttons")]
     [SerializeField] private GameObject _negativeOneHundred;
@@ -72,7 +73,7 @@ public class BettingManager : MonoBehaviour
     /// <summary>
     /// Resets the betting board and betting details before initializing the betting phase
     /// </summary>
-    public void ResetBettingBoard()
+    public IEnumerator ResetBettingBoard()
     {
         // Clear out the chip spawners
         foreach (Transform child in _oneSpawner.transform)
@@ -85,14 +86,15 @@ public class BettingManager : MonoBehaviour
             Destroy(child.gameObject);
 
         _betAmount = 0;
+        yield return null;
     }
 
     /// <summary>
     /// Sets up a bet, initializes the current bet to 1 chip as a bet cannot be 0
     /// </summary>
-    public void SetUpBet(int newChips)
+    public IEnumerator SetUpBet(int newChips)
     {
-        ResetBettingBoard();
+        yield return StartCoroutine(ResetBettingBoard());
 
         _totalChips = newChips;
         _chipsText.SetText($"Total Chips \n{newChips}");
@@ -106,7 +108,7 @@ public class BettingManager : MonoBehaviour
     /// </summary>
     public void SpawnChip(GameObject chipPrefab, GameObject spawnPoint, int betIncrement)
     {
-        if(_betAmount + betIncrement <= _totalChips && spawnPoint.transform.childCount < 10)
+        if(_betAmount + betIncrement <= _totalChips && spawnPoint.transform.childCount < 9)
         {
             _betAmount += betIncrement;
             _betText.SetText($"Bet \n{_betAmount}");
