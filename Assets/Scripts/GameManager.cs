@@ -381,12 +381,13 @@ public class GameManager : MonoBehaviour
         else
             result = GameResult.Push;
 
-        if(result == GameResult.PlayerWins || result == GameResult.Blackjack)
-            _totalChips += _bettingBoard.GetComponent<BettingManager>().BetAmount;
+        int chipChange = _bettingBoard.GetComponent<BettingManager>().BetAmount;
+        if (result == GameResult.PlayerWins || result == GameResult.Blackjack)
+            _totalChips += chipChange;
         else if (result == GameResult.DealerWins)
-            _totalChips -= _bettingBoard.GetComponent<BettingManager>().BetAmount;
+            _totalChips -= chipChange;
 
-        _uiManager.ShowResult(result, playerValue, dealerValue);
+        _uiManager.ShowResult(result, playerValue, dealerValue, chipChange);
     }
 
 
