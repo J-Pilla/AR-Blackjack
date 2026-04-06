@@ -122,23 +122,25 @@ public class UIManager : MonoBehaviour
     /// <summary>
     /// Displays the round result overlay and the "New Round" button.
     /// </summary>
-    public void ShowResult(GameResult result, int playerScore, int dealerScore)
+    public void ShowResult(GameResult result, int playerScore, int dealerScore, int chipChange)
     {
         SetActionsInteractable(false);
 
         UpdateDealerScore(dealerScore);
         UpdatePlayerScore(playerScore);
 
+        string chipText = chipChange > 1 ? "chips" : "chip";
+
         _resultText.text = result switch
         {
-            GameResult.Blackjack => "Blackjack! You Win!",
-            GameResult.PlayerWins => "You Win!",
-            GameResult.DealerWins => "Dealer Wins",
-            GameResult.Push => "It's a Tie",
+            GameResult.Blackjack => $"Blackjack! You Win! \nYou Won {chipChange} {chipText}! ",
+            GameResult.PlayerWins => $"You Win! \nYou Won {chipChange} {chipText}! ",
+            GameResult.DealerWins => $"Dealer Wins \nYou Lost {chipChange} {chipText}! ",
+            GameResult.Push => "It's a Tie \n No Chip Change",
             _ => string.Empty
         };
 
-        _resultText.color = result switch
+        Color resultsColor = result switch
         {
             GameResult.PlayerWins => Color.green,
             GameResult.Blackjack => Color.green,
@@ -146,6 +148,9 @@ public class UIManager : MonoBehaviour
             GameResult.Push => Color.yellow,
             _ => Color.white
         };
+
+        _resultText.color = resultsColor;
+        _resultDisplay.GetComponent<Renderer>().material.color = resultsColor;
 
         SetOptionsToPlay(false);
     }
